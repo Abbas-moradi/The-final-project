@@ -35,6 +35,9 @@ class Address(models.Model):
     street = models.CharField(max_length=100)
     license_plate = models.PositiveSmallIntegerField()
 
+    def __str__(self) -> str:
+        return f'{self.user} as {self.province} - {self.city}'
+
 
 class OtpCode(models.Model):
     phone_number = models.CharField(max_length=13)
