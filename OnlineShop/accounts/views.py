@@ -12,3 +12,4 @@ class UserRegisterView(View):
 
     def post(self):
         pass
+
