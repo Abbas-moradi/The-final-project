@@ -6,6 +6,8 @@ class Category(models.Model):
 
     class Meta:
         ordering = ('name',)
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
 
     def __str__(self) -> str:
         return self.name
@@ -18,7 +20,7 @@ class Product(models.Model):
     number = models.PositiveSmallIntegerField()
     available = models.BooleanField(default=True)
     discount = models.IntegerField()
-    image = models.ImageField(upload_to='media/')
+    image = models.ImageField(upload_to='product/')
     created = models.DateTimeField(auto_now=True)
 
     class Meta:
