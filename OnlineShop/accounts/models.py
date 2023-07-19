@@ -29,7 +29,7 @@ class User(AbstractBaseUser):
         return self.is_admin
 
 class Address(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     province = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
