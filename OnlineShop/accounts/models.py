@@ -28,6 +28,13 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
 
+class Address(models.Model):
+    user = models.ForeignKey(User)
+    province = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    street = models.CharField(max_length=100)
+    license_plate = models.PositiveSmallIntegerField()
+
 
 class OtpCode(models.Model):
     phone_number = models.CharField(max_length=13)
