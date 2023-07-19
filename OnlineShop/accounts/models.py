@@ -27,4 +27,10 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
-    
+
+
+class OtpCode(models.Model):
+    phone_number = models.CharField(max_length=13)
+    code = models.PositiveSmallIntegerField()
+    created = models.DateField(auto_now=True)
+       
