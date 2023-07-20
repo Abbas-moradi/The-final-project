@@ -6,7 +6,6 @@ from django.test import TestCase
 from .models import User, Address, OtpCode
 
 
-
 class UserModelTest(TestCase):
     def setUp(self):
         self.user_data = {
@@ -32,6 +31,7 @@ class UserModelTest(TestCase):
 
     def test_has_module_perms(self):
         self.assertTrue(self.user.has_module_perms('dummy_app_label'))
+
 
 class AddressModelTest(TestCase):
     def setUp(self):
@@ -61,6 +61,7 @@ class AddressModelTest(TestCase):
         expected_str = f'{self.user} as {self.address_data["province"]} - {self.address_data["city"]}'
         self.assertEqual(str(self.address), expected_str)
 
+
 class OtpCodeModelTest(TestCase):
     def setUp(self):
         self.otp_code_data = {
@@ -76,6 +77,7 @@ class OtpCodeModelTest(TestCase):
     def test_str_representation(self):
         expected_str = f'{self.otp_code_data["phone_number"]} - {self.otp_code_data["code"]} - {self.otp_code.created}'
         self.assertEqual(str(self.otp_code), expected_str)
+
 
 
 class UserRegisterViewTest(TestCase):
@@ -110,7 +112,6 @@ class UserRegisterViewTest(TestCase):
         # Verify that the OtpCode instance is created in the database
         otp_code_instance = OtpCode.objects.get(phone_number=data['phone_number'])
         self.assertIsNotNone(otp_code_instance)
-
 
 class UserRegisterVerifyCodeViewTest(TestCase):
     def setUp(self):
