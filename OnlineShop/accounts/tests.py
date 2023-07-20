@@ -66,7 +66,7 @@ class OtpCodeModelTest(TestCase):
     def setUp(self):
         self.otp_code_data = {
             'phone_number': '1234567890',
-            'code': 1234,
+            'code': 12345,
         }
         self.otp_code = OtpCode.objects.create(**self.otp_code_data)
 
