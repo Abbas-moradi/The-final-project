@@ -11,7 +11,7 @@ class UserModelTest(TestCase):
         self.user_data = {
             'email': 'test@example.com',
             'phone_number': '1234567890',
-            'full_name': 'John Doe',
+            'full_name': 'abbas moradi',
         }
         self.user = User.objects.create_user(**self.user_data)
 
@@ -38,7 +38,7 @@ class AddressModelTest(TestCase):
         self.user_data = {
             'email': 'test@example.com',
             'phone_number': '1234567890',
-            'full_name': 'John Doe',
+            'full_name': 'abbas moradi',
         }
         self.user = User.objects.create_user(**self.user_data)
         self.address_data = {
@@ -95,7 +95,7 @@ class UserRegisterViewTest(TestCase):
         data = {
             'phone_number': '1234567890',
             'email': 'test@example.com',
-            'full_name': 'John Doe',
+            'full_name': 'abbas moradi',
             'password': 'testpassword',
         }
         response = self.client.post(self.url, data)
@@ -123,7 +123,7 @@ class UserRegisterVerifyCodeViewTest(TestCase):
         data = {
             'phone_number': '1234567890',
             'email': 'test@example.com',
-            'full_name': 'John Doe',
+            'full_name': 'abbas moradi',
             'password': 'testpassword',
         }
         self.client.post(self.register_url, data)

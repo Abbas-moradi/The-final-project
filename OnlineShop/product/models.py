@@ -20,7 +20,7 @@ class Product(models.Model):
     number = models.PositiveSmallIntegerField()
     available = models.BooleanField(default=True)
     discount = models.IntegerField()
-    image = models.ImageField(upload_to='product/%Y/%m/%m/')
+    image = models.ImageField(upload_to='product/%Y/%m/%d/')
     created = models.DateTimeField(auto_now=True)
 
     class Meta:
