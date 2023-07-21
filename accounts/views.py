@@ -9,7 +9,7 @@ from django.contrib import messages
 
 class UserRegisterView(View):
     form_class = UserRegisterationForm
-    template_name = 'accounts/register.html'
+    template_name = 'register.html'
 
     def get(self, request):
         form = self.form_class
@@ -17,6 +17,7 @@ class UserRegisterView(View):
 
     def post(self, request):
         form = self.form_class(request.POST)
+        print(form)
         if form.is_valid():
             random_code = random.randint(10000, 99999)
             send_otp_code(form.changed_data['phone_number'], random_code)
