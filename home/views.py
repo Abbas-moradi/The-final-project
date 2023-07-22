@@ -49,3 +49,13 @@ class Shop(View):
 
     def post(self, request):
         pass
+
+
+class About(View):
+    template_name = 'about.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        pass
