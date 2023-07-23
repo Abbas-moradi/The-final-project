@@ -71,15 +71,9 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__categories">
                                                 <ul class="nice-scroll">
-                                                    <li><a href="#">Men (20)</a></li>
-                                                    <li><a href="#">Women (20)</a></li>
-                                                    <li><a href="#">Bags (20)</a></li>
-                                                    <li><a href="#">Clothing (20)</a></li>
-                                                    <li><a href="#">Shoes (20)</a></li>
-                                                    <li><a href="#">Accessories (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li>
+                                                    {% for category in categories %}
+                                                        <li><a href="#">{{ category.name }}</a></li>
+                                                    {% endfor %}
                                                 </ul>
                                             </div>
                                         </div>
@@ -158,8 +152,8 @@
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6>{{ product.name }}</h6>
-                                        <a class="add-cart" onclick="addToCart('{{ product.id }}')">+ Add To Cart</a>
+                                        <h6>{{ product.name }}-{{ product.id }}</h6>
+                                        <a href="" class="add-cart" onclick="addToCart('{{ product.id }}')">+ Add To Cart</a>
                                         <div class="rating">
                                             <i class="fa fa-star-o"></i>
                                             <i class="fa fa-star-o"></i>
@@ -202,10 +196,13 @@
 
     <!-- Js Plugins -->
     <!-- set cookie start -->
-    <script addToCart(productId) {
-        document.cookie = 'cart=${productId}; expires=Thu, 01 Jan 2025 00:00:00 UTC; path=/';
-        alert('Product added to cart!');
-    }></script>
+    <script>
+        function addToCart(productId) {
+            document.cookie = `cart=${productId}; expires=Thu, 01 Jan 2025 00:00:00 UTC; path=/`;
+            alert('Product added to cart!');
+        }
+    </script>
+    
     <!-- set cookie End -->
     <script src="{% static 'home/js/jquery-3.3.1.min.js'%}"></script>
     <script src="{% static 'home/js/bootstrap.min.js'%}"></script>
