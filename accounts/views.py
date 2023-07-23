@@ -5,6 +5,8 @@ import random
 from utils import send_otp_code
 from .models import OtpCode, User
 from django.contrib import messages
+from rest_framework.views import APIView
+from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
 
 
 class UserRegisterView(View):
@@ -30,7 +32,7 @@ class UserRegisterView(View):
             }
             messages.success(request, 'code sending for you')
             return redirect('accounts:verify_code')
-        return render(request, self.template_name, {'form':form})
+        return render(request, 'verify.html', {'form':form})
 
 
 class UserRegisterVerifyCodeView(View):
