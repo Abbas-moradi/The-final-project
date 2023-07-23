@@ -3,6 +3,9 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
+    image = models.ImageField(upload_to='product/%Y/%m/%d/')
+    status = models.BooleanField(default=True)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children')
 
     class Meta:
         ordering = ('name',)
@@ -22,6 +25,7 @@ class Product(models.Model):
     discount = models.IntegerField()
     image = models.ImageField(upload_to='product/%Y/%m/%d/')
     created = models.DateTimeField(auto_now=True)
+    status = models.BooleanField(default=True)
 
     class Meta:
         ordering = ('name',)
