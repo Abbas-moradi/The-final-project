@@ -25,7 +25,6 @@ class Product(models.Model):
     discount = models.IntegerField()
     image = models.ImageField(upload_to='product/%Y/%m/%d/')
     created = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=True)
 
     class Meta:
         ordering = ('name',)
