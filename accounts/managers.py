@@ -2,6 +2,9 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UserManager(BaseUserManager):
+    """ 
+Creates and saves a User with the given email,and password. 
+"""
     def create_user(self, phone_number, email, full_name, password):
         if not phone_number:
             raise ValueError('The phone is forgotten')

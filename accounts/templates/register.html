@@ -32,11 +32,12 @@
         <div class="form-content">
           <div class="login-form">
             <div class="title">Login</div>
-          <form action="#">
+          <form id="loginForm" action="">
+            {% csrf_token %}
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-phone"></i>
-                <input type="text" placeholder="Enter your email" required>
+                <input type="text" placeholder="Enter your phone number" required>
               </div>
               <div class="input-box">
                 <i class="fas fa-lock"></i>
