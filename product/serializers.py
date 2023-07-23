@@ -8,5 +8,5 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
                         'name': {'read_only': True},
-                        'price':{'read_only':True}
+                        'price': {'read_only':True}
                         }

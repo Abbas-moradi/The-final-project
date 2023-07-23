@@ -6,6 +6,7 @@ from utils import send_otp_code
 from .models import OtpCode, User
 from django.contrib import messages
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
 
 
@@ -64,3 +65,9 @@ class UserRegisterVerifyCodeView(View):
                 messages.error(request, 'this code is wrong', 'danger')
                 return redirect('accounts:verify_code')
         return redirect('home:home')
+    
+class UserCreateView(APIView):
+    def get(self, request):
+        queryset = User.objects.all()
+        serializer_class = UserSerializer(instance=queryset, many=True)
+        return Response(serializer_class.data)
