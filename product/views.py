@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from .models import Product, Category
 from .serializers import ProductSerializer
 from django.views import View
+from django.http import HttpResponse
 
 
 class ProductCreateView(APIView):
@@ -14,7 +15,7 @@ class ProductCreateView(APIView):
 
 
 class Products(View):
-    template_name = 'shop-details.html'
+    template_name = 'shop.html'
 
     def get(self, request):
         queryset = Product.objects.all()
