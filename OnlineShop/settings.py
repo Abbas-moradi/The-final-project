@@ -151,6 +151,9 @@ EMAIL_HOST_PASSWORD = 'rlvwzemhalkaymxf'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
+# media config
+MEDIA_URL = 'img/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'img')
 
 # REST_FRAMEWORK = {
 #   'DEFAULT_AUTHENTICATION_CLASSES': (

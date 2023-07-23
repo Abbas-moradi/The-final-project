@@ -70,6 +70,7 @@ class UserRegisterVerifyCodeView(View):
     
 
 class UserCreateView(APIView):
+
     def get(self, request):
         queryset = User.objects.all()
         serializer_class = UserSerializer(instance=queryset, many=True)
