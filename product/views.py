@@ -18,8 +18,6 @@ class Products(View):
     template_name = 'shop.html'
 
     def get(self, request):
-        value = request.COOKIES.get('cart')
-        print(value)
         product_queryset = Product.objects.all()
         serializer_class_product = ProductSerializer(instance=product_queryset, many=True)
         category_queryset = Category.objects.all()
@@ -29,3 +27,9 @@ class Products(View):
             "categories": serializer_class_category.data
             })
 
+
+class ProductDetail(View):
+    template_name = 'shop-details.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

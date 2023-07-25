@@ -194,16 +194,29 @@
     </div>
     <!-- Search End -->
 
-    <!-- Js Plugins -->
-    <!-- set cookie start -->
     <script>
         function addToCart(productId) {
-            document.cookie = `cart=${productId}; expires=Thu, 01 Jan 2025 00:00:00 UTC; path=/`;
-            alert('Product added to cart!');
+            var cartValue = document.cookie.split(';').find(cookie => cookie.trim().startsWith('cart='));
+            var cartItems = [];
+            if (cartValue) {
+                cartItems = cartValue.split('=')[1].split(',').map(item => parseInt(item));
+            }
+    
+            if (cartItems.includes(productId)) {
+                alert('محصول به سبد خرید اضافه شد!');
+            } else {
+                cartItems.push(productId);
+                var cartString = cartItems.join(',');
+                var expirationDate = new Date();
+                expirationDate.setFullYear(expirationDate.getFullYear() + 1); // انقضا کوکی را یک سال بعد تنظیم می‌کنیم
+                document.cookie = `cart=${cartString}; expires=${expirationDate.toUTCString()}; path=/`;
+                alert('محصول به سبد خرید اضافه شد!');
+            }
         }
     </script>
     
-    <!-- set cookie End -->
+
+    <!-- Js Plugins -->
     <script src="{% static 'home/js/jquery-3.3.1.min.js'%}"></script>
     <script src="{% static 'home/js/bootstrap.min.js'%}"></script>
     <script src="{% static 'home/js/jquery.nice-select.min.js'%}"></script>

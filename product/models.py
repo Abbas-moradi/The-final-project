@@ -25,12 +25,37 @@ class Product(models.Model):
     discount = models.IntegerField()
     image = models.ImageField(upload_to='product/%Y/%m/%d/')
     created = models.DateTimeField(auto_now=True)
+    brand = models.CharField(max_length=200)
 
     class Meta:
         ordering = ('name',)
 
     def __str__(self) -> str:
         return self.name
+
+
+class ProductImage(models.Model):
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_img')
+    image = models.ImageField(upload_to='product/%Y/%m/%d/')
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('product_id',)
+
+    def __str__(self) -> str:
+        return self.product_id
+
+
+class Comments(models.Model):
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_cmnt')
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    status = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('product_id',)
+        verbose_name = 'comment'
+        verbose_name_plural = 'comments'
 
 
 
