@@ -81,7 +81,10 @@ class UsreLoginView(View):
         return render(request, self.template_name, {'form':form})
     
     def post(self,request):
-        pass
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.changed_data
+            
 
 class UserCreateView(APIView):
 
