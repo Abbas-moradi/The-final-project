@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserRegisterationForm, VerifyForm, UserRegisterForm
+from .forms import UserRegisterationForm, VerifyForm, UserRegisterForm, UserLoginForm
 import random
 from OnlineShop import settings
 from utils import send_otp_code
@@ -14,10 +14,11 @@ from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
 
 class UserRegisterView(View):
     template_name = 'register.html'
+    form_class = UserRegisterForm
 
     def get(self, request):
-        
-        return render(request, self.template_name)
+        form = self.form_class
+        return render(request, self.template_name, {'form':form})
 
     def post(self, request):
         form = UserRegisterForm(request.POST)
@@ -70,6 +71,17 @@ class UserRegisterVerifyCodeView(View):
                 return redirect('accounts:verify_code')
         return redirect('home:home')
     
+
+class UsreLoginView(View):
+    form_class = UserLoginForm
+    template_name = 'user_login.html'
+
+    def get(self, request):
+        form = self.form_class
+        return render(request, self.template_name, {'form':form})
+    
+    def post(self,request):
+        pass
 
 class UserCreateView(APIView):
 

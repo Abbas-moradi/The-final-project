@@ -28,33 +28,11 @@
         </div>
       </div>
     </div>
-    <div class="forms">
+    <div class="forms" for="flip">
         <div class="form-content">
           <div class="login-form">
-            <div class="title">Login</div>
-          <form id="loginForm" action="">
-            {% csrf_token %}
-            <div class="input-boxes">
-              <div class="input-box">
-                <i class="fas fa-phone"></i>
-                <input type="text" name="phone" placeholder="Enter your phone number" required>
-              </div>
-              <div class="input-box">
-                <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Enter your password" required>
-              </div>
-              <div class="text"><a href="#">Forgot password?</a></div>
-              <div class="button input-box">
-                <input type="submit" value="Submit">
-              </div>
-              <div class="text sign-up-text">Don't have an account? <label for="flip">Sigup now</label></div>
-              <div class="text sign-up-text">back to <a href="{% url 'home:home' %}">home</a></div>
-            </div>
-        </form>
-      </div>
-        <div class="signup-form">
-          <div class="title">Signup</div>
-        <form method="post" action="">
+            <div class="title">Register</div>
+          <form method="post" action="">
           {% csrf_token %}
             <div class="input-boxes">
               <div class="input-box">
@@ -74,9 +52,9 @@
                 <input class="form-control" name="password" type="password" placeholder="Enter your password" required>
               </div>
               <div class="button input-box">
-                <button id="registration" type="submit">Register</button>
+                <input type="submit" value="Register" id="registration">
               </div>
-              <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
+              <div class="text sign-up-text">Already have an account? <a href="{% url 'accounts:user_login' %}">Login now</label></div>
               <div class="text sign-up-text">back to <a href="{% url 'home:home' %}">home</a></div>
             </div>
       </form>
