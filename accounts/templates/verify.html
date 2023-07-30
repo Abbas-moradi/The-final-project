@@ -25,23 +25,23 @@
         <div class="form-content">
           <div class="login-form">
             <div class="title">Registration Verify</div>
-          <form action="#">
+          <form method="post" action="">
+            {% csrf_token %}
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-sms"></i>
-                <input name="verifycode" type="text" placeholder="Enter your verify code" required>
+                <input name="code" type="text" placeholder="Enter your verify code" required="true">
               </div>
               <div class="button input-box">
-                <input type="submit" value="Verify">
+                <button id="code" type="submit">Verify</button>
               </div>
-              <div class="text sign-up-text">back to <a href="{% url 'home:home' %}">home</a></div>
             </div>
-        </form>
+          </form>
+          <div class="text sign-up-text">back to <a href="{% url 'home:home' %}">home</a></div>
       </div>
         <div class="signup-form">
           <div class="title">Signup</div>
         <form method="post" action="">
-          {% csrf_token %}
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-user"></i>

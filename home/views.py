@@ -24,7 +24,6 @@ class Contact(View):
 
     def post(self, request):
         form = ContactForm(request.POST)
-        print('*' * 90)
         if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
@@ -34,11 +33,12 @@ class Contact(View):
             email_from = settings.EMAIL_HOST_USER
             try:
                 send_mail(subject,message,email_from,["cafeshopproject098@gmail.com"],fail_silently=False,)
-                
+                return render(request, self.template_name)
             except BadHeaderError:
                 return HttpResponse("Invalid header found.")
         else:
             print('form not valid...')
+        return render(request, self.template_name)
             
 
 class Shop(View):

@@ -37,11 +37,11 @@
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-phone"></i>
-                <input type="text" placeholder="Enter your phone number" required>
+                <input type="text" name="phone" placeholder="Enter your phone number" required>
               </div>
               <div class="input-box">
                 <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Enter your password" required>
+                <input type="password" name="password" placeholder="Enter your password" required>
               </div>
               <div class="text"><a href="#">Forgot password?</a></div>
               <div class="button input-box">
@@ -59,7 +59,7 @@
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-user"></i>
-                <input class="form-control" name="fullname" type="text" placeholder="Enter your full name" required>
+                <input class="form-control" name="full_name" type="text" placeholder="Enter your full name" required>
               </div>
               <div class="input-box">
                 <i class="fas fa-envelope"></i>
@@ -74,14 +74,14 @@
                 <input class="form-control" name="password" type="password" placeholder="Enter your password" required>
               </div>
               <div class="button input-box">
-                <input type="submit" name="Register">
+                <button id="registration" type="submit">Register</button>
               </div>
               <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
               <div class="text sign-up-text">back to <a href="{% url 'home:home' %}">home</a></div>
             </div>
       </form>
     </div>
-    </div>
+  </div>
     </div>
   </div>
 </body>
