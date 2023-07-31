@@ -10,6 +10,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class UserRegisterView(View):
@@ -84,6 +86,11 @@ class UsreLoginView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.changed_data
+
+class UserLogoutView(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        return redirect('home:home')
             
 
 class UserCreateView(APIView):

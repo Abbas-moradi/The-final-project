@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts',
     'product',
     'order',
+    'zarinpal',
 ]
 
 MIDDLEWARE = [
@@ -175,3 +176,9 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
+
+
+# SANDBOX MODE
+
+MERCHANT  =  "00000000-0000-0000-0000-000000000000"
+SANDBOX  =  True

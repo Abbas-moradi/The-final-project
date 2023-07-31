@@ -18,7 +18,7 @@ class Products(View):
     template_name = 'shop.html'
 
     def get(self, request):
-        product_queryset = Product.objects.all()
+        product_queryset = Product.objects.filter(available=True)
         serializer_class_product = ProductSerializer(instance=product_queryset, many=True)
         category_queryset = Category.objects.all()
         serializer_class_category = CategorySerializer(instance=category_queryset, many=True)
