@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'phonenumber_field',
     'home',
     'accounts',
     'product',
@@ -182,3 +183,8 @@ JWT_AUTH = {
 
 MERCHANT  =  "00000000-0000-0000-0000-000000000000"
 SANDBOX  =  True
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    
+]

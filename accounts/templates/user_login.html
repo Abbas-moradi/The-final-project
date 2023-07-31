@@ -32,7 +32,7 @@
         <div class="form-content">
           <div class="login-form">
             <div class="title">Login</div>
-          <form id="loginForm" action="">
+          <form id="loginForm" method="post" action="">
             {% csrf_token %}
             <div class="input-boxes">
               <div class="input-box">
@@ -43,14 +43,15 @@
                 <i class="fas fa-lock"></i>
                 <input type="password" name="password" placeholder="Enter your password" required>
               </div>
-              <div class="text"><a href="#">Forgot password?</a></div>
+              <!-- <div class="text"><a href="#">Forgot password?</a></div> -->
               <div class="button input-box">
                 <input type="submit" value="Login">
               </div>
+            </form>
               <div class="text sign-up-text">Don't have an account? <a href="{% url 'accounts:user_register' %}">Sigup now</a></div>
               <div class="text sign-up-text">back to <a href="{% url 'home:home' %}">home</a></div>
             </div>
-        </form>
+        
       </div>
     </div>
   </div>

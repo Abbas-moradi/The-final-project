@@ -62,7 +62,7 @@ class UserRegisterationForm(forms.Form):
     
 
 class UserLoginForm(forms.Form):
-    phone = forms.CharField(max_length=13)
+    phone = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
 
 

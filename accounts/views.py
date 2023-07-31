@@ -85,7 +85,17 @@ class UsreLoginView(View):
     def post(self,request):
         form = self.form_class(request.POST)
         if form.is_valid():
-            cd = form.changed_data
+            cd = form.cleaned_data
+            phone = cd['phone']
+            password = cd['password']
+            user = authenticate(request, phone_number=phone, password=password)
+            print('*'*50)
+            print(user)
+            if user is not None:
+                login(request, user)
+                return redirect('home:home')
+            messages.error(request, 'phone or pass is wrong', 'warning')
+        return render(request, self.template_name, {'form':form})
 
 class UserLogoutView(LoginRequiredMixin, View):
     def get(self, request):
