@@ -13,7 +13,8 @@
                 <div class="col-lg-6 col-md-5">
                     <div class="header__top__right">
                         <div class="header__top__links">
-                            <a href="{% url 'accounts:user_login' %}">Sign in / Register</a>
+                            {% if request.user.login %}
+                            <a href="{% url 'accounts:user_login' %}">Sign in /</a><a href="{% url 'accounts:user_register' %}">Register</a>
                         </div>
                         
                     </div>
