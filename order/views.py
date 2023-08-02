@@ -21,6 +21,11 @@ class Cart(View):
         pass
 
 
+class CartAddView(View):
+    def post(self, request, product_id):
+        pass
+
+
 class Checkout(View):
     template_name = 'checkout.html'
 

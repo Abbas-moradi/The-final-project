@@ -66,26 +66,24 @@
                             </thead>
                             <tbody>
                                 {% for product in products %}
-                                    <tr>
-                                        <td class="product__cart__item">
-                                            <div class="product__cart__item__pic">
-                                                <img src="{{ product.image.url }}" alt="" width="70">
-                                            </div>
-                                            <div class="product__cart__item__text">
-                                                <h6><a href="{% url 'product:shop' %}">{{ product.name }}</a></h6>
-                                                <h5>{{ product.price }}</h5>
-                                            </div>
-                                        </td>
-                                        <td class="quantity__item">
-                                            <div class="quantity">
-                                                <div class="pro-qty-2">
-                                                    <input type="number" class="quantity-input" value="1" data-price="{{ product.price }}">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="cart__price" data-total-price="{{ product.price }}">$ {{ product.price }}</td>
-                                        <td class="cart__close"><i class="fa fa-close"></i></td>
-                                    </tr>
+                                <tr>
+                                    <td class="product__cart__item">
+                                        <div class="product__cart__item__pic">
+                                            <img src="{{ product.image.url }}" alt="" width="70">
+                                        </div>
+                                        <div class="product__cart__item__text">
+                                            <h6><a href="{% url 'product:shop' %}">{{ product.name }}</a></h6>
+                                            <h5>{{ product.price }}</h5>
+                                        </div>
+                                    </td>
+                                    <td class="quantity__item">
+                                        <div class="quantity">
+                                            <span>{{ itemCount }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price" data-total-price="{{ product.price }}">$ {{ product.price }}</td>
+                                    <td class="cart__close"><i class="fa fa-close"></i></td>
+                                </tr>
                                 {% endfor %}
 
                             </tbody>
@@ -119,7 +117,11 @@
                             <li>Subtotal <span id="subtotal">$ 0.00</span></li>
                             <li>Total <span id="total">$ 0.00</span></li>
                         </ul>
+                        {% if request.user.is_authenticated %}
                         <a href="{% url 'order:checkout' %}" class="primary-btn">Proceed to checkout</a>
+                        {% else %}
+                        <a href="{% url 'accounts:user_login' %}" class="primary-btn">Login first</a>
+                        {% endif %}
                     </div>
                 </div>
                 <!-- Cart Total Section End -->
@@ -160,22 +162,46 @@
     </div>
     <!-- Search End -->
 
+
     <!-- Js Plugins -->
-    <!-- <script>
-        function updateTotalPrice() {
-            var rows = document.querySelectorAll('tr');
-            rows.forEach(row => {
-                var input = row.querySelector('.quantity-input');
-                var price = row.dataset.totalPrice;
-                var quantity = input.value;
-                var totalPrice = price * quantity;
-                row.querySelector('.cart__price').textContent = '$ ' + totalPrice.toFixed(2);
+    <script>
+        function updateRowTotalPrice(row) {
+            var price = parseFloat(row.getAttribute("data-total-price"));
+            var itemCount = parseInt(row.querySelector(".quantity span").textContent);
+            var totalPrice = price * itemCount;
+            row.textContent = "$ " + totalPrice.toFixed(2);
+
+            updateTotalPrices();
+        }
+
+        function updateTotalPrices() {
+            var rows = document.querySelectorAll(".cart__price");
+            var totalCartPrice = 0;
+
+            rows.forEach(function(row) {
+                var price = parseFloat(row.getAttribute("data-total-price"));
+                var itemCount = parseInt(row.closest("tr").querySelector(".quantity span").textContent);
+                var totalPrice = price * itemCount;
+                totalCartPrice += totalPrice;
+            });
+
+            var cartTotalElement = document.getElementById("cart-total");
+            if (cartTotalElement) {
+                cartTotalElement.textContent = "$ " + totalCartPrice.toFixed(2);
+            }
+        }
+
+        var quantityInputs = document.querySelectorAll(".quantity span");
+        for (var i = 0; i < quantityInputs.length; i++) {
+            quantityInputs[i].addEventListener("change", function () {
+                updateRowTotalPrice(this.closest("td.cart__price"));
             });
         }
-    
-    </script> -->
-    
 
+        updateTotalPrices();
+    </script>
+
+    
     <script>
         var closeButtons = document.querySelectorAll('.cart__close');
         closeButtons.forEach(button => {
@@ -183,7 +209,7 @@
                 var row = button.closest('tr');
                 var productId = row.dataset.productId;
     
-                var confirmation = confirm('Are you sure you want to remove this product from the cart?');
+                var confirmation = confirm('آیا برای حذف محصول اطمینان دارید؟');
                 if (confirmation) {
                     document.cookie = 'cart=' + productId + '; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                     row.remove();
@@ -193,33 +219,6 @@
         });
     </script>
 
-    <script>
-        function updateTotalPrice() {
-            var rows = document.querySelectorAll('tr');
-            var totalAmount = 0;
-            rows.forEach(row => {
-                var input = row.querySelector('.quantity-input');
-                var price = row.dataset.totalPrice;
-                var quantity = input.value;
-                var totalPrice = price * quantity;
-                row.querySelector('.cart__price').textContent = '$ ' + totalPrice.toFixed(2);
-                totalAmount += totalPrice;
-            });
-
-            document.getElementById('subtotal').textContent = '$ ' + totalAmount.toFixed(2);
-            var total = totalAmount;
-            document.getElementById('total').textContent = '$ ' + total.toFixed(2);
-        }
-
-        var inputs = document.querySelectorAll('.quantity-input');
-        inputs.forEach(input => {
-            input.addEventListener('change', updateTotalPrice);
-        });
-
-        updateTotalPrice(); 
-    </script>
-
-    
 
     <script src="{% static 'home/js/jquery-3.3.1.min.js'%}"></script>
     <script src="{% static 'home/js/bootstrap.min.js'%}"></script>

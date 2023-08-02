@@ -72,7 +72,19 @@
                                             <div class="shop__sidebar__categories">
                                                 <ul class="nice-scroll">
                                                     {% for category in categories %}
-                                                        <li><a href="#">{{ category.name }}</a></li>
+                                                    <div class="btn-group">
+                                                        <li><a href="{{ category.get_absolute_url }}" class="btn btn-white" >{{ category.name }}</a></li>
+                                                        <button  class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                          <span class="caret"></span>
+                                                          <span class="sr-only">Toggle Dropdown</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            {% for child in category.children.all %}
+                                                                <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                    <br>
                                                     {% endfor %}
                                                 </ul>
                                             </div>
@@ -87,10 +99,9 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__brand">
                                                 <ul>
-                                                    <li><a href="#">Louis Vuitton</a></li>
-                                                    <li><a href="#">Chanel</a></li>
-                                                    <li><a href="#">Hermes</a></li>
-                                                    <li><a href="#">Gucci</a></li>
+                                                    {% for brand in brands %}
+                                                        <li><a href="#">{{ brand.name }}</a></li>
+                                                    {% endfor %}
                                                 </ul>
                                             </div>
                                         </div>
@@ -152,8 +163,16 @@
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6>{{ product.name }}-{{ product.id }}</h6>
-                                        <a href="" class="add-cart" onclick="addToCart('{{ product.id }}')">+ Add To Cart</a>
+                                        <h6>{{ product.name }}</h6>
+                                        {% if request.user.is_authenticated %}
+                                            <form method="post" action="">
+                                                {% csrf_token %}
+                                                {{ form }}
+                                                <a href="" type="submit" value="+ Add To Cart">+ Add To Cart</a>
+                                            </form>
+                                        {% else %}
+                                            <a href="{% url 'accounts:user_login' %}" >Login first</a>
+                                        {% endif %}
                                         <div class="rating">
                                             <i class="fa fa-star-o"></i>
                                             <i class="fa fa-star-o"></i>
@@ -161,7 +180,8 @@
                                             <i class="fa fa-star-o"></i>
                                             <i class="fa fa-star-o"></i>
                                         </div>
-                                        <h5>{{ product.price }}</h5>
+                                        <h5>price .{{ product.price }} $</h5>
+                                        <h5>left over .{{ product.number }}</h5>
                                     </div>
                                     </div>
                                 </div>
@@ -198,25 +218,35 @@
         function addToCart(productId) {
             var cartValue = document.cookie.split(';').find(cookie => cookie.trim().startsWith('cart='));
             var cartItems = [];
+            var itemCount = 0; 
+            
             if (cartValue) {
                 cartItems = cartValue.split('=')[1].split(',').map(item => parseInt(item));
+                itemCount = cartItems.length;
             }
     
             if (cartItems.includes(productId)) {
                 alert('محصول به سبد خرید اضافه شد!');
             } else {
                 cartItems.push(productId);
+                itemCount++;
                 var cartString = cartItems.join(',');
                 var expirationDate = new Date();
-                expirationDate.setFullYear(expirationDate.getFullYear() + 1); // انقضا کوکی را یک سال بعد تنظیم می‌کنیم
+                expirationDate.setFullYear(expirationDate.getFullYear() + 1); 
                 document.cookie = `cart=${cartString}; expires=${expirationDate.toUTCString()}; path=/`;
                 alert('محصول به سبد خرید اضافه شد!');
             }
+    
+            document.getElementById('product-count').textContent = itemCount;
         }
     </script>
     
+    
 
     <!-- Js Plugins -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    
     <script src="{% static 'home/js/jquery-3.3.1.min.js'%}"></script>
     <script src="{% static 'home/js/bootstrap.min.js'%}"></script>
     <script src="{% static 'home/js/jquery.nice-select.min.js'%}"></script>
