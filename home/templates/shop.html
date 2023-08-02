@@ -163,12 +163,12 @@
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6>{{ product.name }}</h6>
+                                        <h6>{{ product.name }} </h6>
                                         {% if request.user.is_authenticated %}
-                                            <form method="post" action="">
+                                            <form method="post" action="{% url 'order:cart_add' product.id %}">
                                                 {% csrf_token %}
                                                 {{ form }}
-                                                <a href="" type="submit" value="+ Add To Cart">+ Add To Cart</a>
+                                                <input href="#" type="submit" value="+ Add To Cart" >
                                             </form>
                                         {% else %}
                                             <a href="{% url 'accounts:user_login' %}" >Login first</a>
@@ -213,35 +213,6 @@
         </div>
     </div>
     <!-- Search End -->
-
-    <script>
-        function addToCart(productId) {
-            var cartValue = document.cookie.split(';').find(cookie => cookie.trim().startsWith('cart='));
-            var cartItems = [];
-            var itemCount = 0; 
-            
-            if (cartValue) {
-                cartItems = cartValue.split('=')[1].split(',').map(item => parseInt(item));
-                itemCount = cartItems.length;
-            }
-    
-            if (cartItems.includes(productId)) {
-                alert('محصول به سبد خرید اضافه شد!');
-            } else {
-                cartItems.push(productId);
-                itemCount++;
-                var cartString = cartItems.join(',');
-                var expirationDate = new Date();
-                expirationDate.setFullYear(expirationDate.getFullYear() + 1); 
-                document.cookie = `cart=${cartString}; expires=${expirationDate.toUTCString()}; path=/`;
-                alert('محصول به سبد خرید اضافه شد!');
-            }
-    
-            document.getElementById('product-count').textContent = itemCount;
-        }
-    </script>
-    
-    
 
     <!-- Js Plugins -->
     

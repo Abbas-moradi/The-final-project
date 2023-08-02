@@ -1,29 +1,39 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from product.models import Product
+from .cart import Cart
+from .forms import CartAddForm
 
 
-class Cart(View):
+
+class CartView(View):
     template_name = 'shopping-cart.html'
 
     def get(self, request):
-        product_in_order = request.COOKIES.get('cart')
-        print(product_in_order)
-        if product_in_order:
-            product_ids = [int(product_id) for product_id in product_in_order.split(',')]
-            products = Product.objects.filter(id__in=product_ids)
-            print(product_ids)
-        else:
-            products = []
-        return render(request, self.template_name, {'products': products})
-
-    def post(self, request):
-        pass
+        cart = Cart(request)
+        return render(request, self.template_name, {'cart': cart})
 
 
 class CartAddView(View):
+    template_name = 'product:shop'
+
     def post(self, request, product_id):
-        pass
+        cart = Cart(request)
+        product = get_object_or_404(Product, id=product_id)
+        form = CartAddForm(request.POST)
+        if form.is_valid():
+            quantity = form.cleaned_data['quantity']
+            cart.add(product, quantity)
+        return redirect(self.template_name)
+
+class CartDelView(View):
+    template_name = 'shopping-cart.html'
+
+    def get(self, request, product_id):
+        cart = Cart(request)
+        product = get_object_or_404(Product, id=product_id)
+        cart.dell(product)
+        return redirect(self.template_name)
 
 
 class Checkout(View):
