@@ -57,9 +57,9 @@
             </div>
             <div class="col-lg-3 col-md-3">
                 <div class="header__nav__option">
-                    <a href="#" class="search-switch"><img src="{% static 'home/img/icon/search.png' %}" alt=""></a>
-                    <a href="#"><img src="{% static 'home/img/icon/heart.png' %}" alt=""></a>
-                    <a href="{% url 'order:shopping-cart' %}"><img src="{% static 'home/img/icon/cart.png' %}" alt=""> <span id="product-count">0</span></a>
+                    <a href="#" class="search-switch"><img src="{% static 'home/img/icon/search.png' %}" ></a>
+                    <a href="#"><img src="{% static 'home/img/icon/heart.png' %}" ></a>
+                    <a href="{% url 'order:shopping-cart' %}"><img src="{% static 'home/img/icon/cart.png' %}"> <span id="product-count">{{ cart|length }}</span></a>
                 </div>
             </div>
         </div>
