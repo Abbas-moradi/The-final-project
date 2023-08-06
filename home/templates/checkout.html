@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Male-Fashion | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'home/css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'home/css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'home/css/magnific-popup.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'home/css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'home/css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'home/css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}" type="text/css">
+</head>
+
+<body>
+    {% include 'inc/Header.html' %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Check Out</h4>
+                        <div class="breadcrumb__links">
+                            <a href="./index.html">Home</a>
+                            <a href="./shop.html">Shop</a>
+                            <span>Check Out</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+        <div class="container">
+            <div class="checkout__form">
+                <form action="#">
+                    {% csrf_token %}
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="checkout__order">
+                                <h6 class="order__title">{{ request.user.full_name }} order</h6>
+                                <div class="checkout__order__products" style="display: flex; justify-content: space-between;">
+                                    <span>Product</span>
+                                    <span>Count</span>
+                                    <span>Total</span>
+                                </div>
+                            <form method="post" action="">
+                                <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap;">
+                                    {% for product in products %}
+                                    <li style="margin-right: 20px; display: flex; align-items: center;">
+                                        <span style="margin-right: 5px;">{{ forloop.counter }}-</span>
+                                        <span style="margin-right: 85px;">{{ product.name }}</span>
+                                        <span style="margin-right: 75px;">{{ itemCount }}</span>
+                                        <span style="margin-right: 15px;">{{ product.price }}</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                
+                                <ul class="checkout__total__all">
+                                    <li>Subtotal <span>0</span></li>
+                                    <li>Total <span>0</span></li>
+                                </ul>
+                                <a href="{% url 'order:checkout' %}" class="site-btn">Payment</a>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="footer__copyright__text">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    <p>Copyright ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>-2020
+                        This online store template was created<i class="fa fa-heart-o"
+                        aria-hidden="true"></i> by <a href="https://github.com/Abbas-moradi" target="_blank">Abbas Moradi</a>
+                    </p>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var products = document.querySelectorAll(".product__name");
+            var itemCounts = document.querySelectorAll(".item__count");
+            var prices = document.querySelectorAll(".product__price");
+            var subtotal = 0;
+    
+            for (var i = 0; i < products.length; i++) {
+                var itemCount = parseInt(itemCounts[i].textContent);
+                var price = parseFloat(prices[i].textContent.replace("$", ""));
+                var itemTotal = itemCount * price;
+                subtotal += itemTotal;
+    
+                var liElement = document.createElement("li");
+                liElement.textContent = products[i].textContent + " x " + itemCount + " $" + itemTotal.toFixed(2);
+    
+                var checkoutTotal = document.querySelector(".checkout__total__all");
+                checkoutTotal.insertBefore(liElement, checkoutTotal.lastElementChild);
+            }
+    
+            var totalElement = document.querySelector(".checkout__total__all li:last-child span");
+            totalElement.textContent = "$" + subtotal.toFixed(2);
+        });
+    </script>
+    
+    <script src="{% static 'home/js/jquery-3.3.1.min.js'%}"></script>
+    <script src="{% static 'home/js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'home/js/jquery.nice-select.min.js'%}"></script>
+    <script src="{% static 'home/js/jquery.nicescroll.min.js'%}"></script>
+    <script src="{% static 'home/js/jquery.magnific-popup.min.js'%}"></script>
+    <script src="{% static 'home/js/jquery.countdown.min.js'%}"></script>
+    <script src="{% static 'home/js/jquery.slicknav.js'%}"></script>
+    <script src="{% static 'home/js/mixitup.min.js'%}"></script>
+    <script src="{% static 'home/js/owl.carousel.min.js'%}"></script>
+    <script src="{% static 'home/js/main.js'%}"></script>
+ 
+</body>
+
+</html>
