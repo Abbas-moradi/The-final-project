@@ -68,7 +68,7 @@
                             <tbody>
                                 {% for item in cart %}
                                     <tr>
-                                        <th scope="row">{{ forloop.counter }}<img src="{{ item.product.image.url }}" width="50px"></th>
+                                        <th scope="row">{{ forloop.counter }}<img src="{{ item.product.image.url }}" width="50px" style="border-radius: 50%;"></th>
                                         <td>{{ item.product }}</td>
                                         <td>{{ item.price }}</td>
                                         <td>{{ item.quantity }}</td>
