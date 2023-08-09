@@ -3,6 +3,7 @@ from django.views import View
 from product.models import Product
 from .cart import Cart
 from .forms import CartAddForm
+from accounts.models import Address
 
 
 
@@ -40,7 +41,15 @@ class Checkout(View):
     template_name = 'checkout.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        cart = Cart(request)
+        user_address = Address.objects.filter(user=request.user)
+        if user_address:
+            print('*'* 50)
+            print('addres has exist...')
+        else:
+            return render(request, 'address.html')
+        return render(request, self.template_name, {'cart': cart})
+
 
     def post(self, request):
         pass

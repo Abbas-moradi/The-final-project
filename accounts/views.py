@@ -118,6 +118,15 @@ class HelloView(APIView):
         content = {'message': 'Hello, World!'}
         return Response(content)
     
+class UserAddress(View):
+    template_name = 'address.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+    
+    def post(self, request):
+        pass
+
 
 # @api_view(['POST'])
 # @permission_classes([AllowAny, ])

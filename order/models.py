@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User
+from accounts.models import User, Address
 from product.models import Product
 
 class Order(models.Model):
@@ -8,6 +8,7 @@ class Order(models.Model):
     order_date = models.DateField(auto_now_add=True)
     order_updated = models.DateField(auto_now_add=True)
     status = models.BooleanField(default=True)
+    user_address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('order_date',)

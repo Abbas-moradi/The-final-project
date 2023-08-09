@@ -36,11 +36,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
-                        <h4>Check Out</h4>
+                        <h4>Address</h4>
                         <div class="breadcrumb__links">
                             <a href="./index.html">Home</a>
                             <a href="./shop.html">Shop</a>
-                            <span>Check Out</span>
+                            <span>Address</span>
                         </div>
                     </div>
                 </div>
@@ -54,37 +54,40 @@
         <div class="container">
             <div class="checkout__form">
                 <form action="#">
-                    
-                    <div class="row justify-content-center">
-                        <div class="col-lg-4 col-md-6">
-                            <div class="checkout__order">
-                                <h6 class="order__title">{{ request.user.full_name }} order</h6>
-                                <div class="checkout__order__products" style="display: flex; justify-content: space-between;">
-                                    <span>Product</span>
-                                    <span>Count</span>
-                                    <span>Total</span>
-                                </div>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6">
+                            <h6 class="coupon__code"><span class="icon_tag_alt"></span> Enter your address accurately</h6>
+                            <h6 class="checkout__title">Address Details</h6>
+                            <div class="row">
                             <form method="post" action="">
-                                {% csrf_token %}
-                                <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap;">
-                                    {% for item in cart %}
-                                    <li style="margin-right: 20px; display: flex; align-items: center;">
-                                        <span style="margin-right: 5px;">{{ forloop.counter }}-</span>
-                                        <span style="margin-right: 90px;">{{ item.product }}</span>
-                                        <span style="margin-right: 70px;">{{ item.quantity }}</span>
-                                        <span style="margin-right: 5px;">{{ item.total_price }}</span>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                                
-                                <ul class="checkout__total__all">
-                                    <li>Subtotal <span>{{ cart.get_total_price }}</span></li>
-                                    <li>Total <span>{{ cart.get_total_price }}</span></li>
-                                </ul>
-                                <a href="{% url 'order:checkout' %}" class="site-btn">Payment</a>
-                            </form>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Province<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>City<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
                             </div>
+                            <div class="checkout__input">
+                                <p>Street<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input">
+                                <p>License_plate<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            
+                            <div class="button input-box">
+                                <a type="submit" class="primary-btn">Add Address</a>
+                            </div>
+                        </form>
                         </div>
+                        
                     </div>
                 </form>
             </div>
@@ -124,31 +127,6 @@
     <!-- Search End -->
 
     <!-- Js Plugins -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var products = document.querySelectorAll(".product__name");
-            var itemCounts = document.querySelectorAll(".item__count");
-            var prices = document.querySelectorAll(".product__price");
-            var subtotal = 0;
-    
-            for (var i = 0; i < products.length; i++) {
-                var itemCount = parseInt(itemCounts[i].textContent);
-                var price = parseFloat(prices[i].textContent.replace("$", ""));
-                var itemTotal = itemCount * price;
-                subtotal += itemTotal;
-    
-                var liElement = document.createElement("li");
-                liElement.textContent = products[i].textContent + " x " + itemCount + " $" + itemTotal.toFixed(2);
-    
-                var checkoutTotal = document.querySelector(".checkout__total__all");
-                checkoutTotal.insertBefore(liElement, checkoutTotal.lastElementChild);
-            }
-    
-            var totalElement = document.querySelector(".checkout__total__all li:last-child span");
-            totalElement.textContent = "$" + subtotal.toFixed(2);
-        });
-    </script>
-    
     <script src="{% static 'home/js/jquery-3.3.1.min.js'%}"></script>
     <script src="{% static 'home/js/bootstrap.min.js'%}"></script>
     <script src="{% static 'home/js/jquery.nice-select.min.js'%}"></script>
