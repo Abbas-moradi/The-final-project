@@ -8,7 +8,7 @@ class Order(models.Model):
     order_date = models.DateField(auto_now_add=True)
     order_updated = models.DateField(auto_now_add=True)
     status = models.BooleanField(default=True)
-    user_address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    user_address = models.TextField()
 
     class Meta:
         ordering = ('order_date',)

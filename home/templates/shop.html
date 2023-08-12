@@ -73,14 +73,14 @@
                                                 <ul class="nice-scroll">
                                                     {% for category in categories %}
                                                     <div class="btn-group">
-                                                        <li><a href="{{ category.get_absolute_url }}" class="btn btn-white" >{{ category.name }}</a></li>
+                                                        <a href="{{ category.get_absolute_url }}" class="btn btn-white" >{{ category.name }}</a>
                                                         <button  class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                           <span class="caret"></span>
                                                           <span class="sr-only">Toggle Dropdown</span>
                                                         </button>
                                                         <ul class="dropdown-menu">
                                                             {% for child in category.children.all %}
-                                                                <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
+                                                                <a href="{{ child.get_absolute_url }}">{{ category.name }}</a>
                                                             {% endfor %}
                                                         </ul>
                                                     </div>

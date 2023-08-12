@@ -19,7 +19,7 @@ class Category(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('category_filter', args=[self.slug,])
+        return reverse('product:category_filter', args=[self.slug,])
 
 class Brand(models.Model):
     name = models.CharField(max_length=100)

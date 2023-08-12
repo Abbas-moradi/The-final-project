@@ -30,9 +30,10 @@ class Products(View):
         serializer_class_category = CategorySerializer(instance=category_queryset, many=True)
         brand_queryset = Brand.objects.all()
         serializer_class_brand = BrandSerializer(instance=brand_queryset, many=True)
+        
         if category_slug:
             category_queryset = Category.objects.get(slug=category_slug)
-            product_queryset = product_queryset.get(category=category_queryset)
+            product_queryset = product_queryset.filter(category=category_queryset)
             serializer_class_product = ProductSerializer(instance=product_queryset, many=True)
 
         return render(request, self.template_name, {

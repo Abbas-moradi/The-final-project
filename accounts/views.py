@@ -4,7 +4,7 @@ from .forms import UserRegisterationForm, VerifyForm, UserRegisterForm, UserLogi
 import random
 from OnlineShop import settings
 from utils import send_otp_code
-from .models import OtpCode, User
+from .models import OtpCode, User, Address
 from django.contrib import messages
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import AddAddress
 
 
 class UserRegisterView(View):
@@ -120,12 +121,22 @@ class HelloView(APIView):
     
 class UserAddress(View):
     template_name = 'address.html'
+    form_class = AddAddress
 
     def get(self, request):
-        return render(request, self.template_name)
+        return render(request, self.template_name, {'form':self.form_class})
     
     def post(self, request):
-        pass
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            Address.objects.create(
+                user=request.user, province=cd['province'],
+                city=cd['city'], street=cd['street'],
+                license_plate=cd['license_plate']
+                )
+            return render(request, 'checkout.html')
+        return render(request, self.template_name, {'form':self.form_class})
 
 
 # @api_view(['POST'])
