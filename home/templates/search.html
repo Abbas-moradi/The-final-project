@@ -52,7 +52,7 @@
     <!-- Shop Section Begin -->
     <section class="shop spad">
         <div class="container">
-            <div class="row">
+            <div class="row col-lg-10">
                 <div class="col-lg-3">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
@@ -61,98 +61,22 @@
                                 <button class="btn btn-outline-success" type="submit">Search</button>
                             </form>
                         </div>
-                        <div class="shop__sidebar__accordion">
-                            <div class="accordion" id="accordionExample">
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
-                                    </div>
-                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__categories">
-                                                <ul class="nice-scroll">
-                                                    {% for category in categories %}
-                                                    <div class="btn-group">
-                                                        <a href="{{ category.get_absolute_url }}" class="btn btn-white">{{ category.name }}</a>
-                                                        
-                                                    </div>
-                                                    <br>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
-                                    </div>
-                                    <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__brand">
-                                                <ul>
-                                                    {% for brand in brands %}
-                                                        <li><a href="#">{{ brand.name }}</a></li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>    
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
-                                    </div>
-                                    <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__tags">
-                                                <a href="#">Product</a>
-                                                <a href="#">Bags</a>
-                                                <a href="#">Shoes</a>
-                                                <a href="#">Fashio</a>
-                                                <a href="#">Clothing</a>
-                                                <a href="#">Hats</a>
-                                                <a href="#">Accessories</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <div class="col-lg-9">
-                    <div class="shop__product__option">
+                    <h2>search results:</h2>
+                       {% if products %}
                         <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="shop__product__option__left">
-                                    <p>Showing 1–12 of 126 results</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="shop__product__option__right">
-                                    <p>Sort by Price:</p>
-                                    <select>
-                                        <option value="">Low To High</option>
-                                        <option value="">$0 - $55</option>
-                                        <option value="">$55 - $100</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                        <div class="row">
-                            {% for product in serializers %}
+                            {% for product in products %}
                             <div class="col-lg-4 col-md-6 col-sm-6 col-sm-6">
                                 <div class="shadow p-3 mb-5 bg-white rounded">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{{ product.image }}">
-                                        <ul class="product__hover">
-                                            <li><a href="#"><img src="{% static 'home/img/icon/heart.png' %}" alt=""></a></li>
-                                            <li><a href="#"><img src="{% static 'home/img/icon/compare.png' %}" alt=""></a></li>
-                                            <li><a href="#"><img src="{% static 'home/img/icon/search.png' %}" alt=""></a></li>
-                                        </ul>
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg" data-setbg="{{ product.image.url }}">
+                                            <ul class="product__hover">
+                                                <li><a href="#"><img src="{% static 'home/img/icon/heart.png' %}" alt=""></a></li>
+                                                <li><a href="#"><img src="{% static 'home/img/icon/compare.png' %}" alt=""></a></li>
+                                                <li><a href="#"><img src="{% static 'home/img/icon/search.png' %}" alt=""></a></li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <div class="product__item__text">
                                         <h6>{{ product.name }} </h6>
@@ -173,14 +97,16 @@
                                             <i class="fa fa-star-o"></i>
                                         </div>
                                         <h5>price .{{ product.price }} $</h5>
-                                        {% if product.number < 4 %}
+
                                         <h5>left over .{{ product.number }}</h5>
-                                        {% endif %}
-                                    </div>
                                     </div>
                                 </div>
                             </div>
                             {% endfor %}
+                            {% else %}
+                                <p>No products found.</p>
+                            {% endif %}
+
                         </div>
             </div>
         </div>

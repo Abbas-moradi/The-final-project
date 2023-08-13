@@ -10,6 +10,8 @@ urlpatterns = [
     path('login/', views.UsreLoginView.as_view(), name='user_login'),
     path('logout/', views.UserLogoutView.as_view(), name='user_logout'),
     path('address/', views.UserAddress.as_view(), name='user_address'),
+    path('edit/', views.EditProfile.as_view(), name='edit_profile'),
+    path('my_order/', views.MyOrder.as_view(), name='my_order'),
     path('user/', views.UserCreateView.as_view(), name='user-list-create'),
     path('hello/', views.HelloView.as_view(), name='hello'),
 ]

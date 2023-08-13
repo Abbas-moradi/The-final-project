@@ -13,6 +13,7 @@ from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AddAddress
+from order.models import *
 
 
 class UserRegisterView(View):
@@ -137,6 +138,24 @@ class UserAddress(View):
                 )
             return render(request, 'index.html')
         return render(request, self.template_name, {'form':self.form_class})
+    
+class EditProfile(View):
+    template = 'edit_profile.html'
+    form = UserRegisterForm
+
+    def get(self, request):
+        current_user = request.user
+        print(current_user)
+        return render(request, self.template, {'form':self.form,'user':current_user})
+    
+
+class MyOrder(View):
+    template_name = 'my_order.html'
+
+    def get(self, request):
+        user_order = Order.objects.filter(user=request.user)
+        user_order_item = OrderItems.objects.filter(order__in=user_order)
+        return render(request, self.template_name, {'orders':user_order, 'items':user_order_item})
 
 
 # @api_view(['POST'])

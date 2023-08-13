@@ -6,7 +6,7 @@ from .serializers import ProductSerializer, CategorySerializer, BrandSerializer
 from django.views import View
 from django.http import HttpResponse
 from order.forms import CartAddForm
-
+from django.views.generic import ListView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
@@ -21,7 +21,7 @@ class ProductCreateView(APIView):
 class Products(View):
     template_name = 'shop.html'
 
-    @method_decorator(cache_page(60 * 15))
+    # @method_decorator(cache_page(60 * 15))
     def get(self, request, category_slug=None):
         form = CartAddForm()
         product_queryset = Product.objects.filter(available=True)
@@ -55,3 +55,15 @@ class UserProfile(View):
 
     def get(self, request):
         return render(request, self.template_name)
+    
+
+class SearchProduct(ListView):
+    model = Product
+    template_name = 'search.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        search_products = self.request.GET.get('search_product')
+        if search_products:
+            products = Product.objects.filter(name__icontains = search_products)
+            return products

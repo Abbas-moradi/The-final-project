@@ -41,7 +41,7 @@ class Address(models.Model):
         verbose_name_plural = 'address'
 
     def __str__(self) -> str:
-        return f'{self.user} as {self.province} - {self.city} - {self.street} - {self.license_plate}'
+        return f'{self.user} from {self.province} - {self.city} - {self.street} - {self.license_plate}'
 
 
 class OtpCode(models.Model):
