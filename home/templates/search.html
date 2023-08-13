@@ -37,10 +37,10 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
-                        <h4>Shop</h4>
+                        <h4>Search</h4>
                         <div class="breadcrumb__links">
                             <a href="./index.html">Home</a>
-                            <span>Shop</span>
+                            <span>search</span>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
     <section class="shop spad">
         <div class="container">
             <div class="row col-lg-10">
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
                             <form class="d-flex" action="{% url 'product:search_product' %}">
@@ -97,8 +97,11 @@
                                             <i class="fa fa-star-o"></i>
                                         </div>
                                         <h5>price .{{ product.price }} $</h5>
-
+                                        {% if product.number < 4 %}
                                         <h5>left over .{{ product.number }}</h5>
+                                        {% else %}
+                                        <h5></h5>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -115,10 +118,7 @@
 
     <!-- Footer Section Begin -->
     <footer class="footer">
-        <div class="container">
-            
-                
-            
+        <div class="container"> 
         </div>
     </footer>
     <!-- Footer Section End -->

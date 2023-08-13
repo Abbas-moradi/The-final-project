@@ -175,6 +175,8 @@
                                         <h5>price .{{ product.price }} $</h5>
                                         {% if product.number < 4 %}
                                         <h5>left over .{{ product.number }}</h5>
+                                        {% else %}
+                                        <h5> .</h5>
                                         {% endif %}
                                     </div>
                                     </div>
