@@ -44,14 +44,24 @@ class Checkout(View):
     form_class = AddAddress
 
     def get(self, request):
+        return render(request, self.template_name)
+
+
+class Paid(View):
+
+    def get(self, request):
+        print('post method')
         cart = Cart(request)
         user_address = Address.objects.filter(user=request.user)
         data_list = list(user_address.values())
+        result_string = ""
+        for data_dict in data_list:
+            for value in data_dict.values():
+                result_string += str(value) + "-"
         if user_address:
-            user_address_cd = str(data_list)
             order = Order.objects.create(
                 user = request.user, paid = True,
-                user_address = user_address_cd
+                user_address = result_string
             )
             for item in cart:
                 OrderItems.objects.create(
@@ -62,8 +72,4 @@ class Checkout(View):
             return render(request, 'index.html')
         return render(request, 'address.html', {'form':self.form_class})
         
-
-
-    def post(self, request):
-        pass
 

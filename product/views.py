@@ -49,3 +49,9 @@ class ProductDetail(View):
 
     def get(self, request):
         return render(request, self.template_name)
+    
+class UserProfile(View):
+    template_name = 'profile.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

@@ -135,7 +135,7 @@ class UserAddress(View):
                 city=cd['city'], street=cd['street'],
                 license_plate=cd['license_plate']
                 )
-            return render(request, 'checkout.html')
+            return render(request, 'index.html')
         return render(request, self.template_name, {'form':self.form_class})
 
 
