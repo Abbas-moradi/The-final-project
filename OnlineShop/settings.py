@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
+    'rest_framework.authtoken',
     'phonenumber_field',
     'home',
     'accounts',
@@ -167,7 +169,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'img')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
 }
 
@@ -192,7 +194,7 @@ AUTHENTICATION_BACKENDS = [
 
 # CACHES = {
 #     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
+#         "BACKEND": "product.Products",
 #         "LOCATION": "redis://127.0.0.1:6379/1",
 #         "OPTIONS": {
 #             "CLIENT_CLASS": "django_redis.client.DefaultClient"

@@ -48,6 +48,7 @@ class Checkout(View):
 
 
 class Paid(View):
+    form_class = AddAddress
 
     def get(self, request):
         print('post method')

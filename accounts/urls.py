@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from rest_framework.authtoken import views as auth_token
 
 
 app_name = 'accounts'
@@ -14,4 +15,5 @@ urlpatterns = [
     path('my_order/', views.MyOrder.as_view(), name='my_order'),
     path('user/', views.UserCreateView.as_view(), name='user-list-create'),
     path('hello/', views.HelloView.as_view(), name='hello'),
+    path('api-token-auth/', auth_token.obtain_auth_token),
 ]

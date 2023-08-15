@@ -155,7 +155,7 @@
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6>{{ product.name }} </h6>
+                                        <a href="{% url 'product:product_detail' product.id %}"><h6>{{ product.name }} </h6></a>
                                         {% if request.user.is_authenticated %}
                                             <form method="post" action="{% url 'order:cart_add' product.id %}">
                                                 {% csrf_token %}

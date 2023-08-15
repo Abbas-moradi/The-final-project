@@ -64,16 +64,16 @@ class ProductImage(models.Model):
         ordering = ('product_id',)
 
     def __str__(self) -> str:
-        return self.product_id
+        return str(self.product_id)
 
 
 class Comment(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_cmnt')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField()
     status = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('product_id',)
