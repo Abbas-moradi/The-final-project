@@ -8,8 +8,8 @@ os.environ.setdefault('DJANGO_SETTING_MADULE', 'OnlineShop.setting')
 celery_app = Celery('OnlineShop')
 celery_app.autodiscover_tasks()
 
-celery_app.conf.broker_url = ''
-celery_app.conf.result_backend = ''
+celery_app.conf.broker_url = 'redis://localhost:6379/0'
+celery_app.conf.result_backend = 'redis://localhost:6379/1'
 celery_app.conf.task_serializer = 'json'
 celery_app.conf.result_serializer = 'json'
 celery_app.conf.accept_content = ['json', 'json']
