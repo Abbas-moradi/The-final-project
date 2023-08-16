@@ -183,6 +183,20 @@
                                 </div>
                             </div>
                             {% endfor %}
+                    
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination ">
+                                    {% if serializers.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ serializers.previous_page_number }}">{{ serializers.previous_page_number }}</a></li>
+                                    {% endif %}
+                   
+                                    {% if serializers.has_next %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ serializers.next_page_number }}">{{ serializers.next_page_number }}</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ serializers.paginator.num_pages }}">Last</a></li>
+                                    {% endif %}
+                                </ul>
+                              </nav>
                         </div>
             </div>
         </div>

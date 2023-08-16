@@ -31,31 +31,37 @@
 
 <body>
     {% include 'inc/Header.html' %}
-    <div>
-      <div class="d-flex ">
-        <div class="flex-fill me-4 mx-3"> 
-          <a class="btn btn-secondary bg-blue" href="{% url 'accounts:edit_profile' %}">My Profile</a><br/><br/>
-          <a class="btn btn-secondary bg-blue" href="{% url 'accounts:my_order' %}">My Order</a><br/><br/>
-          <a class="btn btn-secondary" href="{% url 'accounts:user_address' %}">Add Address</a><br/><br/>
-          <button type="button" class="btn btn-secondary">Secondary</button><br/><br/>
-          <button type="button" class="btn btn-secondary">Secondary</button><br/><br/>
-        </div>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-          <div class="col">
-            <div class="card h-100">
-              <img src="..." class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+    <div class="container">
+      <div class="row">
+          <div class="col-md-2">
+              <a class="btn btn-secondary bg-blue mb-3" href="{% url 'accounts:edit_profile' %}">My Profile</a>
+              <a class="btn btn-secondary bg-blue mb-3" href="{% url 'accounts:my_order' %}">My Order</a>
+              <a class="btn btn-secondary" href="{% url 'accounts:user_address' %}">Add Address</a>
+          </div>
+          <div class="col-md-6">
+              {% if last_order %}
+              <div class="card">
+                <img src="{% static 'home/img/icon/cart.png' %}" class="card-img-top" width="19px" height="19px">
+
+                  <div class="card-body">
+                      <h5 class="card-title">Latest Order</h5>
+                      <p class="card-text">You can see your latest purchase invoice here</p>
+                      <h4>Order Items:</h4>
+                      {% for order in orders %}
+                      <h6># {{ order.product }} - $ {{ order.price }} - & {{ order.quantity }}</h6>
+                      {% endfor %}
+                  </div>
+                  <div class="card-footer">
+                      <small class="text-body-secondary">{{ last_order.order_date }}</small>
+                  </div>
               </div>
-              <div class="card-footer">
-                <small class="text-body-secondary">Last updated 3 mins ago</small>
-              </div>
-            </div>
+              {% endif %}
           </div>
       </div>
-    </div>
-    <br/>
+  </div>
+</br></br></br>
+  
+      
     
     
 

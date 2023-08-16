@@ -15,6 +15,7 @@ from permissions import IsOwnerOrReadOnly
 from order.models import Order, OrderItems
 from django.shortcuts import get_object_or_404
 from product.models import Comment
+from django.core.paginator import Paginator
 
 
 class ProductCreateView(APIView):
@@ -43,9 +44,13 @@ class Products(View):
             category_queryset = Category.objects.get(slug=category_slug)
             product_queryset = product_queryset.filter(category=category_queryset)
             serializer_class_product = ProductSerializer(instance=product_queryset, many=True)
+        
+        pagination = Paginator(serializer_class_product.data, 3)
+        page_number = request.GET.get('page')
+        page_object = pagination.get_page(page_number)
 
         return render(request, self.template_name, {
-            "serializers": serializer_class_product.data,
+            "serializers": page_object,
             "categories": serializer_class_category.data,
             "brands": serializer_class_brand.data,
             "form": form
@@ -62,7 +67,10 @@ class UserProfile(View):
     template_name = 'profile.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        last_order = Order.objects.filter(user=request.user).latest('order_date')
+        order_item = OrderItems.objects.filter(order=last_order)
+
+        return render(request, self.template_name, {'last_order': last_order, 'orders': order_item})
     
 
 class SearchProduct(ListView):

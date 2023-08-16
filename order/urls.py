@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from rest_framework import routers
+
 
 app_name = 'order'
 
@@ -10,3 +12,7 @@ urlpatterns = [
     path('checkout/', views.Checkout.as_view(), name='checkout'),
     path('paid/', views.Paid.as_view(), name='paid'),
 ]
+
+router = routers.SimpleRouter()
+router.register('orders', views.OrderViewSet)
+urlpatterns += router.urls
