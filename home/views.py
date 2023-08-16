@@ -39,16 +39,6 @@ class Contact(View):
         else:
             print('form not valid...')
         return render(request, self.template_name)
-            
-
-class Shop(View):
-    template_name = 'shop.html'
-
-    def get(self, request):
-        return render(request, self.template_name)
-
-    def post(self, request):
-        pass
 
 
 class About(View):

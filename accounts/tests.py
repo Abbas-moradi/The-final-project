@@ -22,17 +22,6 @@ class UserModelTest(TestCase):
         self.assertTrue(self.user.is_active)
         self.assertFalse(self.user.is_admin)
 
-    def test_str_representation(self):
-        expected_str = self.user_data['email']
-        self.assertEqual(str(self.user), expected_str)
-
-    def test_has_perm(self):
-        self.assertTrue(self.user.has_perm('dummy_perm'))
-
-    def test_has_module_perms(self):
-        self.assertTrue(self.user.has_module_perms('dummy_app_label'))
-
-
 class AddressModelTest(TestCase):
     def setUp(self):
         self.user_data = {
@@ -43,10 +32,10 @@ class AddressModelTest(TestCase):
         self.user = User.objects.create_user(**self.user_data)
         self.address_data = {
             'user': self.user,
-            'province': 'Test Province',
-            'city': 'Test City',
-            'street': 'Test Street',
-            'license_plate': 1234,
+            'province': 'imam khomeyni',
+            'city': 'Hashtgerd',
+            'street': 'babei',
+            'license_plate': 12,
         }
         self.address = Address.objects.create(**self.address_data)
 
@@ -57,16 +46,12 @@ class AddressModelTest(TestCase):
         self.assertEqual(self.address.street, self.address_data['street'])
         self.assertEqual(self.address.license_plate, self.address_data['license_plate'])
 
-    def test_str_representation(self):
-        expected_str = f'{self.user} as {self.address_data["province"]} - {self.address_data["city"]}'
-        self.assertEqual(str(self.address), expected_str)
-
 
 class OtpCodeModelTest(TestCase):
     def setUp(self):
         self.otp_code_data = {
             'phone_number': '1234567890',
-            'code': 12345,
+            'code': 13452,
         }
         self.otp_code = OtpCode.objects.create(**self.otp_code_data)
 

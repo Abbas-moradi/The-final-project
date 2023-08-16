@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User, Address
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
@@ -71,3 +71,9 @@ class VerifyCodeForm(forms.Form):
 
 class VerifyForm(forms.Form):
     code = forms.CharField()
+
+class AddAddress(forms.Form):
+    province = forms.CharField(max_length=100)
+    city = forms.CharField(max_length=100)
+    street = forms.CharField(max_length=100)
+    license_plate = forms.IntegerField()

@@ -7,9 +7,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
         extra_kwargs = {
-                        'email': {'read_only': True},
-                        'phone_number':{'read_only':True}
-                        }
+            'password': {'write_only': True}
+        }
+    
+
+    def validate_full_name(self, value):
+        if 'admin' in value:
+            raise serializers.ValidationError('Admin should not be in the full name')
 
 
 class OtpCodeSerializer(serializers.ModelSerializer):

@@ -34,9 +34,14 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
     license_plate = models.PositiveSmallIntegerField()
+    
+    class Meta:
+        ordering = ('user',)
+        verbose_name = 'address'
+        verbose_name_plural = 'address'
 
     def __str__(self) -> str:
-        return f'{self.user} as {self.province} - {self.city}'
+        return f'{self.user} from {self.province} - {self.city} - {self.street} - {self.license_plate}'
 
 
 class OtpCode(models.Model):

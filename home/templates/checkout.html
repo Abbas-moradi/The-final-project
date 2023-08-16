@@ -54,7 +54,7 @@
         <div class="container">
             <div class="checkout__form">
                 <form action="#">
-                    {% csrf_token %}
+                    
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6">
                             <div class="checkout__order">
@@ -64,24 +64,25 @@
                                     <span>Count</span>
                                     <span>Total</span>
                                 </div>
-                            <form method="post" action="">
-                                <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap;">
-                                    {% for product in products %}
-                                    <li style="margin-right: 20px; display: flex; align-items: center;">
-                                        <span style="margin-right: 5px;">{{ forloop.counter }}-</span>
-                                        <span style="margin-right: 85px;">{{ product.name }}</span>
-                                        <span style="margin-right: 75px;">{{ itemCount }}</span>
-                                        <span style="margin-right: 15px;">{{ product.price }}</span>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                                
-                                <ul class="checkout__total__all">
-                                    <li>Subtotal <span>0</span></li>
-                                    <li>Total <span>0</span></li>
-                                </ul>
-                                <a href="{% url 'order:checkout' %}" class="site-btn">Payment</a>
-                            </form>
+                                <form method="post" action="">
+                                    {% csrf_token %}
+                                    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap;">
+                                        {% for item in cart %}
+                                        <li style="margin-right: 20px; display: flex; align-items: center;">
+                                            <span style="margin-right: 5px;">{{ forloop.counter }}-</span>
+                                            <span style="margin-right: 90px;">{{ item.product }}</span>
+                                            <span style="margin-right: 70px;">{{ item.quantity }}</span>
+                                            <span style="margin-right: 5px;">{{ item.total_price }}</span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                    
+                                    <ul class="checkout__total__all">
+                                        <li>Subtotal <span>{{ cart.get_total_price }}</span></li>
+                                        <li>Total <span>{{ cart.get_total_price }}</span></li>
+                                    </ul>
+                                    <a href="{% url 'order:paid' %}" class="primary-btn text-white">Payment</a>
+                                </form>
                             </div>
                         </div>
                     </div>

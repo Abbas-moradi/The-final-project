@@ -4,7 +4,7 @@ from .forms import UserRegisterationForm, VerifyForm, UserRegisterForm, UserLogi
 import random
 from OnlineShop import settings
 from utils import send_otp_code
-from .models import OtpCode, User
+from .models import OtpCode, User, Address
 from django.contrib import messages
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,6 +12,10 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import AddAddress
+from order.models import *
+from rest_framework import viewsets, status
+from django.shortcuts import get_object_or_404
 
 
 class UserRegisterView(View):
@@ -118,31 +122,78 @@ class HelloView(APIView):
         content = {'message': 'Hello, World!'}
         return Response(content)
     
+class UserAddress(View):
+    template_name = 'address.html'
+    form_class = AddAddress
 
-# @api_view(['POST'])
-# @permission_classes([AllowAny, ])
-# def authenticate_user(request):
-#     try:
-#         email = request.data['email']
-#         password = request.data['password']
-#         user = User.objects.get(email=email, password=password)
-#         if user:
-#             try:
-#                 payload = jwt_payload_handler(user)
-#                 token = jwt.encode(payload, settings.SECRET_KEY)
-#                 user_details = {}
-#                 user_details['name'] = "%s %s" % (
-#                     user.first_name, user.last_name)
-#                 user_details['token'] = token
-#                 user_logged_in.send(sender=user.__class__,
-#                                     request=request, user=user)
-#                 return Response(user_details, status=status.HTTP_200_OK)
-#             except Exception as e:
-#                 raise e
-#         else:
-#             res = {
-#                 'error': 'can not authenticate with the given credentials or the account has been deactivated'}
-#             return Response(res, status=status.HTTP_403_FORBIDDEN)
-#     except KeyError:
-#         res = {'error': 'please provide a email and a password'}
-#         return Response(res)
+    def get(self, request):
+        return render(request, self.template_name, {'form':self.form_class})
+    
+    def post(self, request):
+        user_address_exist = Address.objects.filter(user=request.user)
+        if user_address_exist:
+            user_address_exist.delete()
+
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            Address.objects.create(
+                user=request.user, province=cd['province'],
+                city=cd['city'], street=cd['street'],
+                license_plate=cd['license_plate']
+                )
+            return render(request, 'index.html')
+        return render(request, self.template_name, {'form':self.form_class})
+    
+class EditProfile(View):
+    template = 'edit_profile.html'
+    form = UserRegisterForm
+
+    def get(self, request):
+        current_user = request.user
+        print(current_user)
+        return render(request, self.template, {'form':self.form,'user':current_user})
+    
+
+class MyOrder(View):
+    template_name = 'my_order.html'
+
+    def get(self, request):
+        user_order = Order.objects.filter(user=request.user)
+        user_order_item = OrderItems.objects.filter(order__in=user_order)
+        return render(request, self.template_name, {'orders':user_order, 'items':user_order_item})
+
+
+class UserViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, ]
+    queryset = User.objects.all()
+
+    def list(self, request):
+        serializer_data = UserSerializer(instance=self.queryset, many=True)
+        return Response(data= serializer_data.data)
+
+    def create(self, request):
+        serializer_data = UserSerializer(data=request.POST)
+        if serializer_data.is_valid():
+            serializer_data.save()
+            return Response(data= serializer_data.data, status=status.HTTP_201_CREATED)
+        return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        user = get_object_or_404(self.queryset, pk=pk)
+        serializer_data = UserSerializer(instance=user)
+        return Response(data= serializer_data.data, status=status.HTTP_200_OK)
+
+    def partial_update(self, request, pk=None):
+        user = get_object_or_404(self.queryset, pk=pk)
+        serializer_data = UserSerializer(instance=user, data=request.POST, partial=True)
+        if serializer_data.is_valid():
+            serializer_data.save()
+            return Response(data= serializer_data.data, status=status.HTTP_206_PARTIAL_CONTENT)
+        return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk=None):
+        user = get_object_or_404(self.queryset, pk=pk)
+        user.is_active = False
+        user.save()
+        return Response({'result': 'user deactivated now...'}, status=status.HTTP_200_OK)
