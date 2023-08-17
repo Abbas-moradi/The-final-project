@@ -1,12 +1,14 @@
 from django.db import models
-from accounts.models import User
+from accounts.models import User, Address
 from product.models import Product
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_date = models.DateField(auto_now=True)
-    total_amount = models.IntegerField()
+    paid = models.BooleanField(default=False)
+    order_date = models.DateField(auto_now_add=True)
+    order_updated = models.DateField(auto_now_add=True)
     status = models.BooleanField(default=True)
+    user_address = models.TextField()
 
     class Meta:
         ordering = ('order_date',)
@@ -16,12 +18,14 @@ class Order(models.Model):
     def __str__(self) -> str:
         return f'{self.user} - {self.order_date}'
 
+    def get_total_price(self):
+        return sum(item.get_cost() for item in self.items.all())
 
 class OrderItems(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
-    item_total_amount = models.IntegerField()
+    price = models.IntegerField()
 
     class Meta:
         ordering = ('order',)
@@ -30,3 +34,6 @@ class OrderItems(models.Model):
 
     def __str__(self) -> str:
         return f'{self.order} - {self.product}'
+    
+    def get_cost(self):
+        return self.price * self.quantity

@@ -36,11 +36,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
-                        <h4>Shopping Cart</h4>
+                        <h4>Address</h4>
                         <div class="breadcrumb__links">
                             <a href="./index.html">Home</a>
-                            <a href="./shop.html">Shop</a>
-                            <span>Shopping Cart</span>
+                            <a href="./shop.html">Profile</a>
+                            <span>Address</span>
                         </div>
                     </div>
                 </div>
@@ -49,74 +49,49 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Shopping Cart Section Begin -->
-    <section class="shopping-cart spad">
+    <!-- Checkout Section Begin -->
+    <section class="checkout spad">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="shopping__cart__table">
-                        <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">product</th>
-                                <th scope="col">price</th>
-                                <th scope="col">quantity</th>
-                                <th scope="col">total price</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in cart %}
-                                    <tr>
-                                        <th scope="row">{{ forloop.counter }}<img src="{{ item.product.image.url }}" width="50px" style="border-radius: 50%;"></th>
-                                        <td>{{ item.product }}</td>
-                                        <td>{{ item.price }}</td>
-                                        <td>{{ item.quantity }}</td>
-                                        <td>{{ item.total_price }}</td>
-                                        <td class="cart__close"><a href="{% url 'order:cart_del' item.product.id %}" class="fa fa-close"></a></td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                          </table>
-                        
-                    </div>
+            <div class="checkout__form">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="continue__btn update__btn">
-                                <a href="{% url 'product:shop' %}">Continue Shopping</a>
+                        <div class="col-lg-8 col-md-6">
+                            <h6 class="coupon__code"><span class="icon_tag_alt"></span> Enter your address accurately</h6>
+                            <h6 class="checkout__title">Address Details</h6>
+                            <div class="row">
+                            <form method="post" action="{% url 'accounts:user_address' %}">
+                                {% csrf_token %}
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Province<span>*</span></p>
+                                        <input name="province" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>City<span>*</span></p>
+                                        <input name="city" type="text">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                       
-                    </div>
-                </div>
-                <!-- Cart Total Section Begin -->
-                <div class="col-lg-4">
-                    <div class="cart__discount">
-                        <h6>Discount codes</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Coupon code">
-                            <button type="submit">Apply</button>
+                            <div class="checkout__input">
+                                <p>Street<span>*</span></p>
+                                <input name="street" type="text">
+                            </div>
+                            <div  class="checkout__input">
+                                <p>License_plate<span>*</span></p>
+                                <input name="license_plate" type="text">
+                            </div>
+                            
+                            <div class="button input-box">
+                                <button type="submit" class="primary-btn">Add Address</button>
+                            </div>
                         </form>
+                        </div>      
                     </div>
-                    <div class="cart__total">
-                        <h6>Cart total</h6>
-                        <ul>
-                            <li>Subtotal <span id="subtotal">{{ cart.get_total_price }}</span></li>
-                            <li>Total <span id="total">{{ cart.get_total_price }}</span></li>
-                        </ul>
-                        {% if request.user.is_authenticated %}
-                        <a href="{% url 'order:checkout' %}" class="primary-btn">Proceed to checkout</a>
-                        {% else %}
-                        <a href="{% url 'accounts:user_login' %}" class="primary-btn">Login first</a>
-                        {% endif %}
-                    </div>
-                </div>
-                <!-- Cart Total Section End -->
-
             </div>
         </div>
     </section>
-    <!-- Shopping Cart Section End -->
+    <!-- Checkout Section End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer">
@@ -149,9 +124,7 @@
     </div>
     <!-- Search End -->
 
-
     <!-- Js Plugins -->
-    
     <script src="{% static 'home/js/jquery-3.3.1.min.js'%}"></script>
     <script src="{% static 'home/js/bootstrap.min.js'%}"></script>
     <script src="{% static 'home/js/jquery.nice-select.min.js'%}"></script>

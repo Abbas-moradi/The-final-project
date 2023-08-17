@@ -56,9 +56,9 @@
                 <div class="col-lg-3">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
-                            <form action="#">
-                                <input type="text" placeholder="Search...">
-                                <button type="submit"><span class="icon_search"></span></button>
+                            <form class="d-flex" action="{% url 'product:search_product' %}">
+                                <input class="form-control me-2" type="search" name="search_product" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
                             </form>
                         </div>
                         <div class="shop__sidebar__accordion">
@@ -73,16 +73,8 @@
                                                 <ul class="nice-scroll">
                                                     {% for category in categories %}
                                                     <div class="btn-group">
-                                                        <li><a href="{{ category.get_absolute_url }}" class="btn btn-white" >{{ category.name }}</a></li>
-                                                        <button  class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                          <span class="caret"></span>
-                                                          <span class="sr-only">Toggle Dropdown</span>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            {% for child in category.children.all %}
-                                                                <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
-                                                            {% endfor %}
-                                                        </ul>
+                                                        <a href="{{ category.get_absolute_url }}" class="btn btn-white">{{ category.name }}</a>
+                                                        
                                                     </div>
                                                     <br>
                                                     {% endfor %}
@@ -163,7 +155,7 @@
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6>{{ product.name }} </h6>
+                                        <a href="{% url 'product:product_detail' product.id %}"><h6>{{ product.name }} </h6></a>
                                         {% if request.user.is_authenticated %}
                                             <form method="post" action="{% url 'order:cart_add' product.id %}">
                                                 {% csrf_token %}
@@ -181,12 +173,30 @@
                                             <i class="fa fa-star-o"></i>
                                         </div>
                                         <h5>price .{{ product.price }} $</h5>
+                                        {% if product.number < 4 %}
                                         <h5>left over .{{ product.number }}</h5>
+                                        {% else %}
+                                        <h5> .</h5>
+                                        {% endif %}
                                     </div>
                                     </div>
                                 </div>
                             </div>
                             {% endfor %}
+                    
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination ">
+                                    {% if serializers.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ serializers.previous_page_number }}">{{ serializers.previous_page_number }}</a></li>
+                                    {% endif %}
+                   
+                                    {% if serializers.has_next %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ serializers.next_page_number }}">{{ serializers.next_page_number }}</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ serializers.paginator.num_pages }}">Last</a></li>
+                                    {% endif %}
+                                </ul>
+                              </nav>
                         </div>
             </div>
         </div>
