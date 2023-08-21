@@ -34,6 +34,7 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
     license_plate = models.PositiveSmallIntegerField()
+    main_address = models.BooleanField(default=False)
     
     class Meta:
         ordering = ('user',)

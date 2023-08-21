@@ -127,12 +127,13 @@ class UserAddress(View):
     form_class = AddAddress
 
     def get(self, request):
-        return render(request, self.template_name, {'form':self.form_class})
+        user_address = Address.objects.filter(user=request.user)
+        return render(request, self.template_name, {'form':self.form_class, 'user_address': user_address})
     
     def post(self, request):
-        user_address_exist = Address.objects.filter(user=request.user)
-        if user_address_exist:
-            user_address_exist.delete()
+        # user_address_exist = Address.objects.filter(user=request.user)
+        # if user_address_exist:
+        #     user_address_exist.delete()
 
         form = self.form_class(request.POST)
         if form.is_valid():
@@ -142,7 +143,7 @@ class UserAddress(View):
                 city=cd['city'], street=cd['street'],
                 license_plate=cd['license_plate']
                 )
-            return render(request, 'index.html')
+            return redirect('home:home')
         return render(request, self.template_name, {'form':self.form_class})
     
 class EditProfile(View):

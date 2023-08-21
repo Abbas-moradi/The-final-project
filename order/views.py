@@ -62,16 +62,19 @@ class Paid(View):
     def get(self, request):
         cart = Cart(request)
         user_address = Address.objects.filter(user=request.user)
-        data_list = list(user_address.values())
-        result_string = ""
-        for data_dict in data_list:
-            for value in data_dict.values():
-                result_string += str(value) + "-"
+        
         if user_address:
+            data_list = list(user_address.values())
+            result_string = ""
+            
+            for data_dict in data_list:
+                for value in data_dict.values():
+                    result_string += str(value) + "-"
             order = Order.objects.create(
-                user = request.user, paid = True,
+                user = request.user, paid = False,
                 user_address = result_string
             )
+
             for item in cart:
                 OrderItems.objects.create(
                     order=order, product=item['product'], 
@@ -86,6 +89,8 @@ class Paid(View):
             # email_from = settings.EMAIL_HOST_USER
             # try:
             #     send_mail(subject,message,email_from,[request.user],fail_silently=False,)
+            order.paid = True
+            order.save()
             return redirect('home:home')
             # except BadHeaderError:
             #     return HttpResponse("Invalid header found.")
