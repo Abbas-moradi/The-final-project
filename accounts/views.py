@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import AddAddress
+from .forms import AddAddress, AddressSelectionForm
 from order.models import *
 from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
@@ -93,8 +93,6 @@ class UsreLoginView(View):
             phone = cd['phone']
             password = cd['password']
             user = authenticate(request, phone_number=phone, password=password)
-            print('*'*50)
-            print(user)
             if user is not None:
                 login(request, user)
                 return redirect('home:home')
@@ -125,10 +123,11 @@ class HelloView(APIView):
 class UserAddress(View):
     template_name = 'address.html'
     form_class = AddAddress
+    choice_address = AddressSelectionForm
 
     def get(self, request):
         user_address = Address.objects.filter(user=request.user)
-        return render(request, self.template_name, {'form':self.form_class, 'user_address': user_address})
+        return render(request, self.template_name, {'form':self.form_class, 'user_address': user_address, 'choice_form': self.choice_address})
     
     def post(self, request):
         # user_address_exist = Address.objects.filter(user=request.user)
@@ -146,13 +145,32 @@ class UserAddress(View):
             return redirect('home:home')
         return render(request, self.template_name, {'form':self.form_class})
     
+
+class ChoiceAddress(View):
+    form_class = AddressSelectionForm
+
+    def post(self, request):
+        form = AddressSelectionForm(request.POST)
+        address_id = form['address_id']
+        if form.is_valid():
+            user_addresses = Address.objects.filter(user=request.user)
+            selected_address_id = form.cleaned_data['address_id']
+            for address in user_addresses:
+                if address.id == selected_address_id:
+                    address.main_address = True
+                    address.save()
+                else:
+                    address.main_address = False
+                    address.save()
+            return redirect('home:profile')
+        return redirect('home:home')
+    
 class EditProfile(View):
     template = 'edit_profile.html'
     form = UserRegisterForm
 
     def get(self, request):
         current_user = request.user
-        print(current_user)
         return render(request, self.template, {'form':self.form,'user':current_user})
     
 

@@ -79,3 +79,6 @@ class AddAddress(forms.Form):
     license_plate = forms.IntegerField()
 
 
+class AddressSelectionForm(forms.Form):
+    address_id = forms.IntegerField(widget=forms.HiddenInput())
+    main_address = forms.BooleanField(widget=forms.HiddenInput(), required=False)

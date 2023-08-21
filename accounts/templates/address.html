@@ -53,15 +53,19 @@
     <section class="checkout spad">
         <div class="container">
             <h4>User addresses</h4></br>
+            <form method="post" action="{% url 'accounts:choice_address' %}">
+            {% csrf_token %}
             {% for address in user_address %}
                 <h5>
                     <label>
-                        <input type="radio" name="main_address" value="{{ address.id }}" {% if address.main_address %}checked{% endif %}>
+                        <input type="radio" name="address_id" value="{{ address.id }}" {% if address.main_address %}checked{% endif %}>
+                        <input type="hidden" name="main_address" value="{{ is_main_address }}">
                         {{ address }}
                     </label><br>
                 </h5>
             {% endfor %}
-            <button>choice main address</button><br>
+            <button type="submit">choice main address</button><br>
+        </form>
         </br>
             <div class="checkout__form">
                     <div class="row">

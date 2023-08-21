@@ -61,12 +61,12 @@ class Paid(View):
 
     def get(self, request):
         cart = Cart(request)
-        user_address = Address.objects.filter(user=request.user)
+        user_address = Address.objects.filter(user=request.user, main_address=True)
         
         if user_address:
             data_list = list(user_address.values())
             result_string = ""
-            
+
             for data_dict in data_list:
                 for value in data_dict.values():
                     result_string += str(value) + "-"
