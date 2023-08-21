@@ -16,6 +16,7 @@ from order.models import Order, OrderItems
 from django.shortcuts import get_object_or_404
 from product.models import Comment
 from django.core.paginator import Paginator
+from .forms import UserComment 
 
 
 class ProductCreateView(APIView):
@@ -56,12 +57,6 @@ class Products(View):
             "form": form
             })
 
-
-class ProductDetail(View):
-    template_name = 'shop-details.html'
-
-    def get(self, request):
-        return render(request, self.template_name)
     
 class UserProfile(View):
     template_name = 'profile.html'
@@ -117,20 +112,46 @@ class CommentView(APIView):
     
 class ProductDetail(View):
     template_name = 'shop-details.html'
+    form_class = UserComment
 
     def get(self, request, product_id):
         product_detail = Product.objects.filter(pk=product_id)
         img = ProductImage.objects.filter(product_id=product_id)
         comments = Comment.objects.filter(product_id=product_id, status=True)
-        user_comment = None
+        user_comment = False
         user_order = Order.objects.filter(user=request.user)
         if user_order.exists():
-            user_order_item = OrderItems.objects.filter(order=user_order.first())
-            # user_order_item = get_object_or_404(OrderItems, order=user_order)
-            # user_order_item = OrderItems.objects.filter(order=user_order)
-            if user_order_item:
-                user_comment = True
-            else:
-                user_comment = False
+            for order in user_order:
+                if OrderItems.objects.filter(order=order, product=product_id):
+                    user_comment = True
 
-        return render(request, self.template_name, {'product': product_detail, 'img': img, 'comment': user_comment, 'comments': comments})
+        return render(request, self.template_name, {'product': product_detail,
+                                                    'img': img, 'comment': user_comment,
+                                                     'comments': comments, 'form':self.form_class})
+    
+    def post(self, request, product_id):
+        comment_data = UserComment(request.POST)
+        if comment_data.is_valid():
+            product = Product.objects.get(id=product_id)
+            user = request.user
+            title = comment_data.cleaned_data['title']
+            description = comment_data.cleaned_data['description']
+            status = False
+
+            comment = Comment(product_id=product, user=user, title=title, description=description, status=status)
+            comment.save()
+            
+            product_detail = Product.objects.filter(pk=product_id)
+            img = ProductImage.objects.filter(product_id=product_id)
+            comments = Comment.objects.filter(product_id=product_id, status=True)
+            user_comment = False
+            user_order = Order.objects.filter(user=request.user)
+            if user_order.exists():
+                for order in user_order:
+                    if OrderItems.objects.filter(order=order, product=product_id):
+                        user_comment = True
+
+            return render(request, self.template_name, {'product': product_detail,
+                                                        'img': img, 'comment': user_comment,
+                                                        'comments': comments, 'form':self.form_class})
+        return render(request, 'index.html')

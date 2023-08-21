@@ -100,18 +100,32 @@
                                 <h5>{{ comment.user.full_name }} say {{ comment.title }}</h5>
                                 <h6>{{ comment.description }}</h6></br>
                                 {% endfor %}
+
+                                {% if comment == True %}
+                                <form method="post" action="">
+                                    {% csrf_token %}
+                                    {% for field in form %}
+                                    <div class="field">
+                                        {{ field.label_tag }}
+                                        {{ field }}
+                                        {{ field.errors }}
+                                    </div>
+                                    {% endfor %}
+                                    <!-- <input name="product" type="hidden" value="{{ item.id }}">
+                                    <input name="title" type="text" placeholder="Title">
+                                    <input name="title" type="text" placeholder="Title">
+                                    <input name="description" type="textaria" placeholder="Description"> -->
+                                    <button name="submit" type="submit">send comment</button> 
+                                </form>
+                                {% else %}
+                                <h4>شما نمیتوانید برای این محصول نظری را ثبت کنید</h4>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {% if comment == True %}
-        <h1>true</h1>
-        {% else %}
-        <h1>false</h1>
-        {% endif %}
-        
+        </div>        
         {% endfor %}
     </section>
     <!-- Shop Details Section End -->

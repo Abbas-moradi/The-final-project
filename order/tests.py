@@ -58,3 +58,26 @@ class OrderModelTest(TestCase):
         self.assertEqual(order_item.product, self.product)
         self.assertEqual(order_item.quantity, quantity)
         self.assertEqual(order_item.item_total_amount, item_total_amount)
+
+
+
+# email send by celery test
+
+from django.test import TestCase
+from django.core.mail import outbox
+from .tasks import order_email_sender
+
+class OrderEmailSenderTest(TestCase):
+    def test_order_email_sender(self):
+        order_id = 1
+        user_email = 'en.moradi.66@gmail.com'
+
+        order_email_sender.delay(order_id, user_email)
+
+        self.assertEqual(len(outbox), 1)
+
+        sent_email = outbox[0]
+        self.assertEqual(sent_email.subject, 'The order was placed')
+        self.assertEqual(sent_email.body, 'Your order 1 has been registered and is being tracked\nThis message has been sent to you by Abbas Moradi online shop')
+        self.assertEqual(sent_email.from_email, 'en.moradi.66@gmail.com')
+        self.assertEqual(sent_email.to, ['en.moradi.66@gmail.com'])
