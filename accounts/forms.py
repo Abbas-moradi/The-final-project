@@ -77,3 +77,5 @@ class AddAddress(forms.Form):
     city = forms.CharField(max_length=100)
     street = forms.CharField(max_length=100)
     license_plate = forms.IntegerField()
+
+
