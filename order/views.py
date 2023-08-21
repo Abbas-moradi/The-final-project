@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.core.mail import BadHeaderError, send_mail
 from OnlineShop import settings
 from django.http import HttpResponse
+from order.tasks import order_email_sender
 
 
 
@@ -79,14 +80,15 @@ class Paid(View):
                 
             del request.session['cart']
 
-            subject = 'The order was placed'
-            message = f'Your order {order.id} has been registered and is being tracked\nhis message has been sent to you by Abbas Moradi online shop'
-            email_from = settings.EMAIL_HOST_USER
-            try:
-                send_mail(subject,message,email_from,[request.user],fail_silently=False,)
-                return render(request, self.template_name)
-            except BadHeaderError:
-                return HttpResponse("Invalid header found.")
+            order_email_sender(order.id, request.user)
+            # subject = 'The order was placed'
+            # message = f'Your order {order.id} has been registered and is being tracked\nhis message has been sent to you by Abbas Moradi online shop'
+            # email_from = settings.EMAIL_HOST_USER
+            # try:
+            #     send_mail(subject,message,email_from,[request.user],fail_silently=False,)
+            return redirect('home:home')
+            # except BadHeaderError:
+            #     return HttpResponse("Invalid header found.")
 
         return render(request, 'address.html', {'form':self.form_class})
         

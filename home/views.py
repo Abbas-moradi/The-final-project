@@ -5,16 +5,21 @@ from OnlineShop import settings
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 import logging
+from order.models import OrderItems
+from product.models import Product
+from django.db.models import Count
+
 
 
 class Home(View):
     template_name = 'index.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        product_counts = OrderItems.objects.values('product').annotate(total_quantity=Count('product__id'))
+        most_ordered_product = Product.objects.get(id=product_counts.order_by('-total_quantity').first()['product'])
+        last_products = Product.objects.all().order_by('-id')[:2]
+        return render(request, self.template_name, {'most_ordered_product': most_ordered_product, 'last_products': last_products})
 
-    def post(self, request):
-        pass
 
 class Contact(View):
     template_name = 'contact.html'
