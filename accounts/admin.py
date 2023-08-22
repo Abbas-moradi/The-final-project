@@ -2,7 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import Group
-from .models import User, OtpCode, Address
+from .models import User, OtpCode, Address, Coupon
+from django.contrib import admin
+from datetime import timedelta
+from django.utils import timezone
 
 
 @admin.register(OtpCode)
@@ -34,6 +37,8 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(Address)
+admin.site.register(Coupon)
+
 
 # After finishing the settings, go to the setting section and add the following command
 # AUTH_USER_MODEL = 'accounts.User'
