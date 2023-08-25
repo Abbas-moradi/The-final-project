@@ -3,7 +3,7 @@ from django.views import View
 from product.models import Product
 from .cart import Cart
 from .forms import CartAddForm
-from accounts.models import Address
+from accounts.models import Address, Coupon
 from accounts.forms import AddAddress
 from .models import Order, OrderItems
 from rest_framework import viewsets, status
@@ -51,7 +51,9 @@ class Checkout(View):
     template_name = 'checkout.html'
     form_class = AddAddress
 
-    def get(self, request):
+    def get(self, request, coupon=None):
+        if coupon:
+            print('yessssssssssssssssss')
         return render(request, self.template_name)
 
 
@@ -59,7 +61,7 @@ class Paid(View):
     form_class = AddAddress
     template_name = 'index.html'
 
-    def get(self, request):
+    def get(self, request, discount=None):
         cart = Cart(request)
         user_address = Address.objects.filter(user=request.user, main_address=True)
         

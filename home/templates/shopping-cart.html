@@ -93,10 +93,10 @@
                 <div class="col-lg-4">
                     <div class="cart__discount">
                         <h6>Discount codes</h6>
-                        <form method ="post" action="#">
+                        <form method ="post" action="">
                             {% csrf_token %}
-                            <input type="text" placeholder="Coupon code">
-                            <button type="submit">Apply</button>
+                            <input  name="coupon" type="text" placeholder="Coupon code">
+                            <a href="{% url 'order:checkout' %}" type="submit" class="primary-btn">Apply</a>
                         </form>
                     </div>
                     <div class="cart__total">

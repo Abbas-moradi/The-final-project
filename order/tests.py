@@ -8,6 +8,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from . import views
 
+
 class TestOrderUrls(TestCase):
 
     def test_cart_url_resolves(self):
@@ -58,6 +59,34 @@ class OrderModelTest(TestCase):
         self.assertEqual(order_item.product, self.product)
         self.assertEqual(order_item.quantity, quantity)
         self.assertEqual(order_item.item_total_amount, item_total_amount)
+
+
+from django.test import TestCase
+from .models import Order, Product, OrderItems
+
+class OrderItemsTestCase(TestCase):
+
+    def setUp(self):
+        self.order = Order.objects.create(order_number='123', total_amount=100)
+        self.product = Product.objects.create(name='Product 1', price=50)
+
+    def test_order_item_creation(self):
+        order_item = OrderItems.objects.create(order=self.order, product=self.product, quantity=2, price=50)
+
+        self.assertEqual(order_item.order, self.order)
+        self.assertEqual(order_item.product, self.product)
+        self.assertEqual(order_item.quantity, 2)
+        self.assertEqual(order_item.price, 50)
+
+    def test_get_cost_method(self):
+        order_item = OrderItems.objects.create(order=self.order, product=self.product, quantity=3, price=30)
+
+        self.assertEqual(order_item.get_cost(), 3 * 30)
+
+    def test_order_item_str_method(self):
+        order_item = OrderItems.objects.create(order=self.order, product=self.product, quantity=1, price=10)
+
+        self.assertEqual(str(order_item), f'{self.order} - {self.product}')
 
 
 

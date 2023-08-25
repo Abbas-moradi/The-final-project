@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from .models import Product, Category, Brand, Comment, ProductImage
 from .serializers import ProductSerializer, CategorySerializer, BrandSerializer, CommentSerializer
 from django.views import View
-from django.http import HttpResponse
 from order.forms import CartAddForm
 from django.views.generic import ListView
 from django.views.decorators.cache import cache_page
