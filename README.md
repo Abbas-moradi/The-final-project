@@ -9,11 +9,11 @@ To implement an online payment system for processing orders.
 To provide product browsing and searching capabilities for users.
 To enable user account creation for order tracking.
 Environment Setup
-Operating System: [Specify the operating system]
-Python Version: [Specify the Python version]
-Django Version: [Specify the Django version]
-Database: [Specify the type of database]
-and...
+Operating System: []
+Python Version: [3.11]
+Django Version: [4.2]
+Database: [sqlite , postgresql]
+
 Installation and Execution
 Provide information about how to install and run the project. This includes installing dependencies, environment setup, and command instructions for running the project.
 bash
