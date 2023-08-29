@@ -23,3 +23,6 @@ urlpatterns = [
 router = routers.SimpleRouter()
 router.register('user', views.UserViewSet)
 urlpatterns += router.urls
+
+
+

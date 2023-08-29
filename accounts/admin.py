@@ -8,6 +8,15 @@ from datetime import timedelta
 from django.utils import timezone
 
 
+"""
+this code sets up the Django admin interface for managing User,
+OtpCode, Address, and Coupon models. It customizes the way User
+objects are displayed and edited in the admin interface and 
+specifies the fields to be displayed for OtpCode objects. 
+Additionally, it unregisters the Group model and suggests 
+configuring the AUTH_USER_MODEL setting to use a custom User model.
+"""
+
 @admin.register(OtpCode)
 class OtpCodeAdmin(admin.ModelAdmin):
     list_display = ('phone_number', 'code', 'created')

@@ -18,6 +18,11 @@ from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 
 
+"""
+This view handles the user registration process,
+ including form validation, code generation, 
+ and session management.
+"""
 class UserRegisterView(View):
     template_name = 'register.html'
     form_class = UserRegisterForm
@@ -45,7 +50,11 @@ class UserRegisterView(View):
         
         return render(request, 'verify.html', {'form':form})
 
-
+"""
+This view handles the code verification process during user
+registration and creates a new user account upon successful verification.
+It also manages error messages and redirects as needed.
+"""
 class UserRegisterVerifyCodeView(View):
     form_class = VerifyForm
 
@@ -77,7 +86,11 @@ class UserRegisterVerifyCodeView(View):
                 return redirect('accounts:verify_code')
         return redirect('home:home')
     
-
+    
+"""
+These views handle user login and logout operations and provide
+a seamless authentication process for users in my Django application.
+"""
 class UsreLoginView(View):
     form_class = UserLoginForm
     template_name = 'user_login.html'
@@ -183,6 +196,13 @@ class MyOrder(View):
         return render(request, self.template_name, {'orders':user_order, 'items':user_order_item})
 
 
+
+"""
+This UserViewSet provides a RESTful API for managing user data,
+including creating, retrieving, updating, and deactivating user accounts.
+It also enforces authentication for these operations, ensuring that only 
+authenticated users can access these endpoints.
+"""
 class UserViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, ]
     queryset = User.objects.all()
@@ -216,3 +236,4 @@ class UserViewSet(viewsets.ViewSet):
         user.is_active = False
         user.save()
         return Response({'result': 'user deactivated now...'}, status=status.HTTP_200_OK)
+    

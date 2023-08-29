@@ -1,45 +1,86 @@
-Online Shop Project Documentation
-Description
-The Online Shop project documentation provides an overview of the project, its goals, and related details.
+# Online Store Project with Django
 
-Project Objectives
-To create an online store for selling various products to customers.
-To establish an admin panel for administrators to manage products, orders, and users.
-To implement an online payment system for processing orders.
-To provide product browsing and searching capabilities for users.
-To enable user account creation for order tracking.
-Environment Setup
-Operating System: []
-Python Version: [3.11]
-Django Version: [4.2]
-Database: [sqlite , postgresql]
+## Overview
 
-Installation and Execution
-Provide information about how to install and run the project. This includes installing dependencies, environment setup, and command instructions for running the project.
-bash
-Copy code
-# Install dependencies
-pip install -r requirements.txt
+This project is an Online Store built using Django, featuring various key components and technologies:
 
-# Run the project
-python manage.py runserver
-Project Architecture
-Explain the overall project architecture, including models, views, URLs, and other core components.
-Database
-Describe the project's database, including database models and primary tables.
-Views and Features
-Describe the main views and features of the project, including examples of URLs and corresponding functionalities.
-Admin Panel
-Explain the admin panel and its management features.
-Security
-Describe the security measures implemented in the project.
-Testing and Quality Assurance
-Explain the testing and quality assurance processes, including sample tests.
-Known Issues
-List known issues and open items related to the project.
-Future Development
-Outline plans for future project development and potential new features.
-Contributors
-List project team members and contributors.
-License
-Specify the project's licensing information, along with the license text if applicable.
+- **JWT Token Authentication**: Authentication in this project is managed using JSON Web Tokens (JWT) for secure user sessions.
+
+- **Django REST Framework (DRF)**: The project utilizes DRF to create robust APIs for managing products, user profiles, orders, and comments.
+
+- **Caching with Redis**: Redis is employed for caching, enhancing performance by storing frequently accessed data.
+
+- **Celery for Asynchronous Tasks**: Celery, a distributed task queue, is used to handle asynchronous tasks like sending emails, updating product inventory, and more.
+
+## Features
+
+- **Product Management**: Admins can add, edit, and categorize products, while users can browse and search for products.
+
+- **User Profiles**: Each user has a profile page that displays order history and relevant details.
+
+- **Search Functionality**: Users can search for products using keywords, with results displayed on a dedicated search page.
+
+- **Comments and Reviews**: Users can leave comments and reviews on products, contributing to product discussions.
+
+- **JWT Token-Based Authentication**: Users are authenticated using JWT tokens, providing secure access to their profiles and order history.
+
+## Installation
+
+1. Clone the repository to your local machine:
+
+    ```bash
+    git clone https://github.com/Abbas-moradi/The-final-project.git
+    cd The-final-project
+    ```
+
+2. Create a virtual environment and activate it:
+
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    ```
+
+3. Install project dependencies:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. Set up database and apply migrations:
+
+    ```bash
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+5. Start the Celery worker for asynchronous tasks:
+
+    ```bash
+    celery -A OnlineShop worker --loglevel=info
+    ```
+
+6. Run the development server:
+
+    ```bash
+    python manage.py runserver
+    ```
+
+## Usage
+
+- Access the admin panel at `/admin` to manage products, categories, and users.
+
+- Use the provided API endpoints for product listing, user profiles, order creation, and commenting.
+
+- Customize the frontend templates in the `templates` directory to match your store's design.
+
+## Contributing
+
+Contributions are welcome! Feel free to fork the repository and submit pull requests for new features, bug fixes, or improvements.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+This README provides an overview of my project, how to install it, how to use it, and contributions from the open source community. 
