@@ -9,8 +9,12 @@ from order.models import OrderItems
 from product.models import Product
 from django.db.models import Count
 
-
-
+"""
+This view is responsible for displaying dynamic content on the homepage,
+ including the most ordered product and the latest products. It calculates
+   this information by querying the database and then renders the 
+   'index.html' template with the appropriate data.
+"""
 class Home(View):
     template_name = 'index.html'
 

@@ -16,7 +16,10 @@ from django.http import HttpResponse
 from order.tasks import order_email_sender
 
 
-
+"""
+This code defines several Django views for managing a shopping
+cart and the checkout process in an online shop.
+"""
 class CartView(View):
     template_name = 'shopping-cart.html'
 
@@ -100,6 +103,11 @@ class Paid(View):
         return render(request, 'address.html', {'form':self.form_class})
         
 
+"""
+Overall, this viewset provides a RESTful API for managing orders,
+allowing users to list their orders, create new orders, retrieve order details,
+update orders, and deactivate orders as needed.
+"""
 class OrderViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, ]
     queryset = Order.objects.all()
