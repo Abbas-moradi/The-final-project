@@ -1,14 +1,16 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.authentication import TokenAuthentication
 from accounts.models import User, Address
 from order.models import Order, OrderItems
-from serializers import UserSerializer, AddressSerializer, OrderSerializers, OrderItemSerializers
+from api.serializers import UserSerializer, AddressSerializer, OrderSerializers, OrderItemSerializers
 
 
 class UserViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated, ]
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.all()
 
     def list(self, request):

@@ -168,6 +168,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'img')
 #   ),
 # }
 
+# rest framework config
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -183,6 +185,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 1
 }
+
+# jwt authentications config
 
 import datetime
 JWT_AUTH = {
@@ -203,7 +207,7 @@ AUTHENTICATION_BACKENDS = [
     
 ]
 
-
+# redis caches config
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
