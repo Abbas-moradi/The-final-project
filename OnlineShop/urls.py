@@ -29,6 +29,7 @@ urlpatterns = [
     path('api_product/', include('product.urls', namespace='api_product')),
     path('api_accounts/', include('accounts.urls', namespace='api_accounts')),
     path('', include('home.urls',)),
+    path('', include('api.urls',)),
 ]
 
 
