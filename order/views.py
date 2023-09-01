@@ -3,7 +3,7 @@ from django.views import View
 from product.models import Product
 from .cart import Cart
 from .forms import CartAddForm
-from accounts.models import Address
+from accounts.models import Address, Coupon
 from accounts.forms import AddAddress
 from .models import Order, OrderItems
 from rest_framework import viewsets, status
@@ -13,9 +13,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.core.mail import BadHeaderError, send_mail
 from OnlineShop import settings
 from django.http import HttpResponse
+from order.tasks import order_email_sender
 
 
-
+"""
+This code defines several Django views for managing a shopping
+cart and the checkout process in an online shop.
+"""
 class CartView(View):
     template_name = 'shopping-cart.html'
 
@@ -50,7 +54,9 @@ class Checkout(View):
     template_name = 'checkout.html'
     form_class = AddAddress
 
-    def get(self, request):
+    def get(self, request, coupon=None):
+        if coupon:
+            print('yessssssssssssssssss')
         return render(request, self.template_name)
 
 
@@ -58,19 +64,22 @@ class Paid(View):
     form_class = AddAddress
     template_name = 'index.html'
 
-    def get(self, request):
+    def get(self, request, discount=None):
         cart = Cart(request)
-        user_address = Address.objects.filter(user=request.user)
-        data_list = list(user_address.values())
-        result_string = ""
-        for data_dict in data_list:
-            for value in data_dict.values():
-                result_string += str(value) + "-"
+        user_address = Address.objects.filter(user=request.user, main_address=True)
+        
         if user_address:
+            data_list = list(user_address.values())
+            result_string = ""
+
+            for data_dict in data_list:
+                for value in data_dict.values():
+                    result_string += str(value) + "-"
             order = Order.objects.create(
-                user = request.user, paid = True,
+                user = request.user, paid = False,
                 user_address = result_string
             )
+
             for item in cart:
                 OrderItems.objects.create(
                     order=order, product=item['product'], 
@@ -79,18 +88,26 @@ class Paid(View):
                 
             del request.session['cart']
 
-            subject = 'The order was placed'
-            message = f'Your order {order.id} has been registered and is being tracked\nhis message has been sent to you by Abbas Moradi online shop'
-            email_from = settings.EMAIL_HOST_USER
-            try:
-                send_mail(subject,message,email_from,[request.user],fail_silently=False,)
-                return render(request, self.template_name)
-            except BadHeaderError:
-                return HttpResponse("Invalid header found.")
+            order_email_sender(order.id, request.user)
+            # subject = 'The order was placed'
+            # message = f'Your order {order.id} has been registered and is being tracked\nhis message has been sent to you by Abbas Moradi online shop'
+            # email_from = settings.EMAIL_HOST_USER
+            # try:
+            #     send_mail(subject,message,email_from,[request.user],fail_silently=False,)
+            order.paid = True
+            order.save()
+            return redirect('home:home')
+            # except BadHeaderError:
+            #     return HttpResponse("Invalid header found.")
 
         return render(request, 'address.html', {'form':self.form_class})
         
 
+"""
+Overall, this viewset provides a RESTful API for managing orders,
+allowing users to list their orders, create new orders, retrieve order details,
+update orders, and deactivate orders as needed.
+"""
 class OrderViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, ]
     queryset = Order.objects.all()

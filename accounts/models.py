@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from .managers import UserManager
+from datetime import datetime, timedelta
 
 
 class User(AbstractBaseUser):
@@ -34,6 +35,7 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
     license_plate = models.PositiveSmallIntegerField()
+    main_address = models.BooleanField(default=False)
     
     class Meta:
         ordering = ('user',)
@@ -52,3 +54,16 @@ class OtpCode(models.Model):
     def __str__(self) -> str:
         return f'{self.phone_number} - {self.code} - {self.created}'
        
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=20)
+    discount = models.IntegerField()
+    created = models.DateField(auto_now_add=True)
+    expire_day = models.SmallIntegerField(default=30)
+    expire = models.DateField()
+    used = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.expire = datetime.now().date() + timedelta(days=self.expire_day)
+        super(Coupon, self).save(*args, **kwargs)

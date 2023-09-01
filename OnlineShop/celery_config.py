@@ -3,7 +3,13 @@ from datetime import timedelta
 import os
 
 
-os.environ.setdefault('DJANGO_SETTING_MADULE', 'OnlineShop.setting')
+"""
+This configuration is suitable for running Celery with Redis
+as both the message broker and result backend, and it's a common
+setup for handling asynchronous tasks in Django applications.
+"""
+
+os.environ.setdefault('DJANGO_SETTING_MODULE', 'OnlineShop.setting')
 
 celery_app = Celery('OnlineShop')
 celery_app.autodiscover_tasks()

@@ -3,6 +3,12 @@ from OnlineShop import settings
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse
 
+"""
+This Celery task is designed to run asynchronously and is typically
+triggered when an order is placed in the online shop. It sends an 
+email notification to the user to inform them about their order, 
+including the order ID and a custom message.
+"""
 
 @shared_task()
 def order_email_sender(order_id, user_email):
