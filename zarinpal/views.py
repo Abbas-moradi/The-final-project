@@ -21,6 +21,13 @@ phone = 'YOUR_PHONE_NUMBER'  # Optional
 CallbackURL = 'http://127.0.0.1:8080/verify/'
 
 
+"""
+Overall, this function appears to be designed to send payment
+ requests to a payment gateway API, handle various response scenarios,
+   and return relevant information or error codes based on the 
+   response received. It also includes error handling for timeout 
+   and connection issues during the request.
+"""
 def send_request(request):
     data = {
         "MerchantID": settings.MERCHANT,
@@ -49,6 +56,13 @@ def send_request(request):
         return {'status': False, 'code': 'connection error'}
 
 
+"""
+Overall, this function appears to be designed to verify a payment by
+ sending a request to a payment gateway API, handling various response scenarios,
+   and returning relevant information or error codes based on the response received.
+     It performs similar error handling for HTTP status codes as the previous 
+     function and returns the status and, if successful, the reference ID for the payment.
+"""
 def verify(authority):
     data = {
         "MerchantID": settings.MERCHANT,

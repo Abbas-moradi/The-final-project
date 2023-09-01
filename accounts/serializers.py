@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import User, OtpCode, Address
 
 
+"""
+this UserSerializer is configured to work with the User model,
+include all fields in the serialization, and mark the 'password' field
+as write-only, ensuring that it's not exposed in API responses.
+"""
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

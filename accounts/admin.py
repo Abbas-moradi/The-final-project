@@ -2,8 +2,20 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import Group
-from .models import User, OtpCode, Address
+from .models import User, OtpCode, Address, Coupon
+from django.contrib import admin
+from datetime import timedelta
+from django.utils import timezone
 
+
+"""
+this code sets up the Django admin interface for managing User,
+OtpCode, Address, and Coupon models. It customizes the way User
+objects are displayed and edited in the admin interface and 
+specifies the fields to be displayed for OtpCode objects. 
+Additionally, it unregisters the Group model and suggests 
+configuring the AUTH_USER_MODEL setting to use a custom User model.
+"""
 
 @admin.register(OtpCode)
 class OtpCodeAdmin(admin.ModelAdmin):
@@ -34,6 +46,8 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(Address)
+admin.site.register(Coupon)
+
 
 # After finishing the settings, go to the setting section and add the following command
 # AUTH_USER_MODEL = 'accounts.User'

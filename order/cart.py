@@ -2,6 +2,12 @@ from product.models import Product
 
 CART_SESSION_ID = 'cart'
 
+"""
+This Cart class provides a straightforward way to manage a user's 
+shopping cart in a Django application. It allows for adding, removing,
+and calculating the total price of items in the cart, among other functionalities.
+"""
+
 class Cart:
     def __init__(self, request):
         self.session = request.session

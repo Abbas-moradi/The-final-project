@@ -10,7 +10,7 @@ services:
     depends_on:
       - db
     environment:
-      - DJANGO_SETTINGS_MODULE=myproject.settings
+      - DJANGO_SETTINGS_MODULE=OnlineShop.settings
     command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --bind 0.0.0.0:8000 OnlineShop.wsgi:application"
 
   db:

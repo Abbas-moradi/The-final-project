@@ -1,5 +1,10 @@
 from django.contrib.auth.models import BaseUserManager
 
+"""
+This custom manager allows you to create and manage user objects
+in a more structured way, and it enforces the required fields 
+for creating users and superusers.
+"""
 
 class UserManager(BaseUserManager):
     """ 

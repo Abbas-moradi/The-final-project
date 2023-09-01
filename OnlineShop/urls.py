@@ -29,9 +29,12 @@ urlpatterns = [
     path('api_product/', include('product.urls', namespace='api_product')),
     path('api_accounts/', include('accounts.urls', namespace='api_accounts')),
     path('', include('home.urls',)),
+    path('', include('api.urls',)),
 ]
 
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT)
+
+

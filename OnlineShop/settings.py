@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'product',
     'order',
     'zarinpal',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -167,6 +168,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'img')
 #   ),
 # }
 
+# rest framework config
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -182,6 +185,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 1
 }
+
+# jwt authentications config
 
 import datetime
 JWT_AUTH = {
@@ -202,13 +207,10 @@ AUTHENTICATION_BACKENDS = [
     
 ]
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "product.Products",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient"
-#         },
-#         "KEY_PREFIX": "example"
-#     }
-# }
+# redis caches config
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}

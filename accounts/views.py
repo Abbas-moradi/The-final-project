@@ -12,12 +12,17 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, OtpCodeSerializer, AddressSerializer
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import AddAddress
+from .forms import AddAddress, AddressSelectionForm
 from order.models import *
 from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 
 
+"""
+This view handles the user registration process,
+ including form validation, code generation, 
+ and session management.
+"""
 class UserRegisterView(View):
     template_name = 'register.html'
     form_class = UserRegisterForm
@@ -45,7 +50,11 @@ class UserRegisterView(View):
         
         return render(request, 'verify.html', {'form':form})
 
-
+"""
+This view handles the code verification process during user
+registration and creates a new user account upon successful verification.
+It also manages error messages and redirects as needed.
+"""
 class UserRegisterVerifyCodeView(View):
     form_class = VerifyForm
 
@@ -77,7 +86,11 @@ class UserRegisterVerifyCodeView(View):
                 return redirect('accounts:verify_code')
         return redirect('home:home')
     
-
+    
+"""
+These views handle user login and logout operations and provide
+a seamless authentication process for users in my Django application.
+"""
 class UsreLoginView(View):
     form_class = UserLoginForm
     template_name = 'user_login.html'
@@ -93,8 +106,6 @@ class UsreLoginView(View):
             phone = cd['phone']
             password = cd['password']
             user = authenticate(request, phone_number=phone, password=password)
-            print('*'*50)
-            print(user)
             if user is not None:
                 login(request, user)
                 return redirect('home:home')
@@ -125,14 +136,16 @@ class HelloView(APIView):
 class UserAddress(View):
     template_name = 'address.html'
     form_class = AddAddress
+    choice_address = AddressSelectionForm
 
     def get(self, request):
-        return render(request, self.template_name, {'form':self.form_class})
+        user_address = Address.objects.filter(user=request.user)
+        return render(request, self.template_name, {'form':self.form_class, 'user_address': user_address, 'choice_form': self.choice_address})
     
     def post(self, request):
-        user_address_exist = Address.objects.filter(user=request.user)
-        if user_address_exist:
-            user_address_exist.delete()
+        # user_address_exist = Address.objects.filter(user=request.user)
+        # if user_address_exist:
+        #     user_address_exist.delete()
 
         form = self.form_class(request.POST)
         if form.is_valid():
@@ -142,8 +155,28 @@ class UserAddress(View):
                 city=cd['city'], street=cd['street'],
                 license_plate=cd['license_plate']
                 )
-            return render(request, 'index.html')
+            return redirect('home:home')
         return render(request, self.template_name, {'form':self.form_class})
+    
+
+class ChoiceAddress(View):
+    form_class = AddressSelectionForm
+
+    def post(self, request):
+        form = AddressSelectionForm(request.POST)
+        address_id = form['address_id']
+        if form.is_valid():
+            user_addresses = Address.objects.filter(user=request.user)
+            selected_address_id = form.cleaned_data['address_id']
+            for address in user_addresses:
+                if address.id == selected_address_id:
+                    address.main_address = True
+                    address.save()
+                else:
+                    address.main_address = False
+                    address.save()
+            return redirect('home:profile')
+        return redirect('home:home')
     
 class EditProfile(View):
     template = 'edit_profile.html'
@@ -151,7 +184,6 @@ class EditProfile(View):
 
     def get(self, request):
         current_user = request.user
-        print(current_user)
         return render(request, self.template, {'form':self.form,'user':current_user})
     
 
@@ -164,6 +196,13 @@ class MyOrder(View):
         return render(request, self.template_name, {'orders':user_order, 'items':user_order_item})
 
 
+
+"""
+This UserViewSet provides a RESTful API for managing user data,
+including creating, retrieving, updating, and deactivating user accounts.
+It also enforces authentication for these operations, ensuring that only 
+authenticated users can access these endpoints.
+"""
 class UserViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, ]
     queryset = User.objects.all()
@@ -197,3 +236,4 @@ class UserViewSet(viewsets.ViewSet):
         user.is_active = False
         user.save()
         return Response({'result': 'user deactivated now...'}, status=status.HTTP_200_OK)
+    
