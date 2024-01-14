@@ -24,7 +24,7 @@ class Home(View):
         product_counts = OrderItems.objects.values('product').annotate(total_quantity=Count('product__id'))
         most_ordered_product = get_object_or_404(Product, id=product_counts.order_by('-total_quantity').first()['product'])
         # most_ordered_product = Product.objects.get(id=product_counts.order_by('-total_quantity').first()['product'])
-        last_products = Product.objects.all().order_by('-id')[:2]
+        last_products = Product.objects.all().order_by('-id')[:3]
         return render(request, self.template_name, {'most_ordered_product': most_ordered_product, 'last_products': last_products})
 
 

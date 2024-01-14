@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'drf_spectacular',
     'rest_framework.authtoken',
     'phonenumber_field',
     'home',
@@ -183,7 +184,8 @@ REST_FRAMEWORK = {
         'user': '5/minute'
     },
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 1
+    'PAGE_SIZE': 1,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # jwt authentications config
@@ -199,8 +201,8 @@ JWT_AUTH = {
 
 # SANDBOX MODE
 
-MERCHANT  =  "00000000-0000-0000-0000-000000000000"
-SANDBOX  =  True
+MERCHANT = "00000000-0000-0000-0000-000000000000"
+SANDBOX = True
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -213,4 +215,16 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379",
     }
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'OnlineShop API',
+    'DESCRIPTION': 'onlineshop',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False
+}
+
+SWAGGER_SETTINGS = {
+    "DEFAULT_AUTO_SCHEMA_CLASS": "drf_yasg.inspectors.SwaggerAutoSchema",
 }

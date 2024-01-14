@@ -10,6 +10,7 @@ email notification to the user to inform them about their order,
 including the order ID and a custom message.
 """
 
+
 @shared_task()
 def order_email_sender(order_id, user_email):
     subject = 'The order was placed'

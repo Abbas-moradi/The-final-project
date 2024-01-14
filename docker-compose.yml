@@ -14,8 +14,45 @@ services:
     command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --bind 0.0.0.0:8000 OnlineShop.wsgi:application"
 
   db:
-    image: postgres:12
+    image: postgres:14
     environment:
       - POSTGRES_DB=onlineshop
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=@bb@s1366
+
+  redis:  
+  image: redis
+  volumes:
+    - ./redis.conf:/usr/local/etc/redis/redis.conf
+  ports:
+    - "6379"
+
+  celery_worker:
+  build:
+    context: .
+    dockerfile: ./compose/local/django/Dockerfile
+    image: django_celery_worker
+    command: /start-celeryworker
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env/.dev-sample
+    depends_on:
+      - redis
+      - db
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: madefire/chordtest
+    command: ['celery', 'worker', '-A', 'app.app', '-l', 'info']
+    environment:
+      - BROKER_URL=amqp://admin:mypass@rabbitmq:5672//
+      - RESULT_BACKEND=redis://redis:6379/0
+      - C_FORCE_ROOT=true
+    volumes:
+      - ./:/app/
+    depends_on:
+      - rabbitmq
+      - redis

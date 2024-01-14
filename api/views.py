@@ -4,8 +4,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 from accounts.models import User, Address
+from product.models import Comment
 from order.models import Order, OrderItems
-from api.serializers import UserSerializer, AddressSerializer, OrderSerializers, OrderItemSerializers
+from api.serializers import UserSerializer, AddressSerializer, OrderSerializers, CommentSerializer
+from permissions import IsOwnerOrReadOnly
+from rest_framework.views import APIView
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -112,38 +115,34 @@ class OrderViewSet(viewsets.ViewSet):
         order.is_active = False
         order.save()
         return Response({'result': 'order deleted now...'}, status=status.HTTP_200_OK)
+
+
+class CommentView(APIView):
+    permission_classes = [IsOwnerOrReadOnly, IsAuthenticated]
+    def get(self, request):
+        comments = Comment.objects.all()
+        serializers_data = CommentSerializer(instance=comments, many=True)
+        return Response(serializers_data.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        comment_data = CommentSerializer(data=request.data)
+        if comment_data.is_valid():
+            comment_data.save()
+            return Response(comment_data.data, status=status.HTTP_201_CREATED)
+        return Response(comment_data.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
-class OrderItemViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated, ]
-    queryset = OrderItems.objects.all()
-
-    def list(self, request):
-        serializer_data = OrderItemSerializers(instance=self.queryset.filter(user=request.user), many=True)
-        return Response(data= serializer_data.data)
-
-    def create(self, request):
-        serializer_data = OrderItemSerializers(data=request.POST)
+    def put(self, request, pk):
+        comment_upd = Comment.objects.get(pk=pk)
+        self.check_object_permissions(request, comment_upd)
+        serializer_data = CommentSerializer(instance=comment_upd, data=request.data, partial=True)
         if serializer_data.is_valid():
             serializer_data.save()
-            return Response(data= serializer_data.data, status=status.HTTP_201_CREATED)
+            return Response(serializer_data.data, status=status.HTTP_201_CREATED)
         return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, pk=None):
-        user = get_object_or_404(self.queryset.filter(user=request.user), pk=pk)
-        serializer_data = OrderItemSerializers(instance=user)
-        return Response(data= serializer_data.data, status=status.HTTP_200_OK)
-
-    def partial_update(self, request, pk=None):
-        order = get_object_or_404(self.queryset.filter(user=request.user), pk=pk)
-        serializer_data = OrderItemSerializers(instance=order, data=request.POST, partial=True)
-        if serializer_data.is_valid():
-            serializer_data.save()
-            return Response(data= serializer_data.data, status=status.HTTP_206_PARTIAL_CONTENT)
-        return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, pk=None):
-        order = get_object_or_404(self.queryset.filter(user=request.user), pk=pk)
-        order.is_active = False
-        order.save()
-        return Response({'result': 'order deleted now...'}, status=status.HTTP_200_OK)
+    def delete(self, request, pk):
+        comment_dlt = Comment.objects.get(pk=pk)
+        self.check_object_permissions(request, comment_dlt)
+        comment_dlt.delete()
+        return Response({'message': 'comment deleted...'}, status=status.HTTP_200_OK)
+    

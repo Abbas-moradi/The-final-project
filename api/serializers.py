@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from accounts.models import User, Address
 from order.models import Order, OrderItems
+from product.models import Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,6 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
         
 
 class AddressSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(read_only=True, slug_field='email')
+
     class Meta:
         model = Address
         fields = '__all__'
@@ -39,3 +42,14 @@ class OrderItemSerializers(serializers.ModelSerializer):
     class Meta:
         model = OrderItems
         fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(read_only = True, slug_field='full_name')
+    product_id = serializers.SlugRelatedField(read_only = True, slug_field='name')
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
