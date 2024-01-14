@@ -32,7 +32,7 @@ This view is intended to display a list of products with optional
 category filtering, and it uses caching to improve performance by
 serving cached HTML content when appropriate.
 """
-class Products(View)
+class Products(View):
     template_name = 'shop.html'
 
     @method_decorator(cache_page(60 * 15))
